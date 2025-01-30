@@ -101,7 +101,7 @@ public class DoorTeleporter : MonoBehaviour
     private Vector2 GetEntryOffset()
     {
         // Offset from the center of the room based on entry direction
-        float offsetAmount = 12f; // Adjust this value to control how far from the door the player spawns
+        float offsetAmount = 15f; // Adjust this value to control how far from the door the player spawns
 
         switch (direction)
         {
