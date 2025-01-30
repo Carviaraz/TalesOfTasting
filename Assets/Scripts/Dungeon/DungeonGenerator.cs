@@ -4,8 +4,6 @@ using UnityEngine;
 
 public class DungeonController : MonoBehaviour
 {
-    public enum RoomType { Start, Boss, Monster, FireCamp, Treasure, Item, PrepareBoss }
-
     [System.Serializable]
     public class Room
     {
@@ -51,7 +49,6 @@ public class DungeonController : MonoBehaviour
     private int currentTreasureRooms = 0;
     private int currentItemRooms = 0;
     //private int treasureRoomCount = 0;
-    private bool fireCampSpawned = false;
 
     [ContextMenu("Regenerate Dungeon")]
     public void RegenerateDungeon()
@@ -583,18 +580,5 @@ public class DungeonController : MonoBehaviour
             Debug.Log($"Instantiated {room.roomType} at {room.gridPosition} with doors: Up={room.upDoor}, Down={room.downDoor}, Left={room.leftDoor}, Right={room.rightDoor}");
         }
 
-    }
-}
-
-// Helper attribute for Unity Inspector
-public class MinMaxAttribute : PropertyAttribute
-{
-    public float min;
-    public float max;
-
-    public MinMaxAttribute(float min, float max)
-    {
-        this.min = min;
-        this.max = max;
     }
 }

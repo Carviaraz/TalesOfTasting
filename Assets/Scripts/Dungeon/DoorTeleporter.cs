@@ -32,14 +32,14 @@ public class DoorTeleporter : MonoBehaviour
         UpdateDoorVisual();
     }
 
-    private bool ShouldRoomBeLocked(DungeonController.RoomType roomType)
+    private bool ShouldRoomBeLocked(RoomType roomType)
     {
         switch (roomType)
         {
-            case DungeonController.RoomType.FireCamp:
-            case DungeonController.RoomType.Item:
-            case DungeonController.RoomType.Start:
-            case DungeonController.RoomType.Treasure:
+            case RoomType.FireCamp:
+            case RoomType.Item:
+            case RoomType.Start:
+            case RoomType.Treasure:
                 return false;
             default:
                 return true;
