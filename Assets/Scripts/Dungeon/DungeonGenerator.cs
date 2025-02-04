@@ -4,15 +4,6 @@ using UnityEngine;
 
 public class DungeonController : MonoBehaviour
 {
-    [System.Serializable]
-    public class Room
-    {
-        public GameObject prefab;
-        public Vector2Int gridPosition;
-        public RoomType roomType;
-        public bool upDoor, downDoor, leftDoor, rightDoor;
-    }
-
     [Header("Room Prefabs")]
     public GameObject startRoomPrefab;
     public GameObject bossRoomPrefab;
@@ -536,7 +527,6 @@ public class DungeonController : MonoBehaviour
         currentMonsterRooms++;
         return RoomType.Monster;
     }
-
 
     void ConnectRooms(Vector2Int roomA, Vector2Int roomB)
     {
