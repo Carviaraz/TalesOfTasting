@@ -12,8 +12,8 @@ TagManager:
   - Water
   - UI
   - Room
-  - 
-  - 
+  - Player
+  - Projectile
   - 
   - 
   - 
@@ -49,6 +49,9 @@ TagManager:
     locked: 0
   - name: Player
     uniqueID: 3114000471
+    locked: 0
+  - name: Weapon
+    uniqueID: 3043951587
     locked: 0
   - name: UI
     uniqueID: 2239098587

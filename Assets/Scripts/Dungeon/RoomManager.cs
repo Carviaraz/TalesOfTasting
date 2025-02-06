@@ -1,11 +1,9 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class RoomManager : MonoBehaviour
 {
     private RoomComponent roomComponent;
-    private DungeonController.RoomType roomType;
+    private RoomType roomType;
 
     private void Awake()
     {
@@ -46,8 +44,8 @@ public class RoomManager : MonoBehaviour
 
     private bool IsEnemyRoom()
     {
-        return roomType == DungeonController.RoomType.Monster ||
-               roomType == DungeonController.RoomType.Boss;
+        return roomType == RoomType.Monster ||
+               roomType == RoomType.Boss;
     }
 
     //private void MonitorEnemy(Enemy enemy)

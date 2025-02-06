@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class DoorTeleporter : MonoBehaviour
@@ -12,13 +10,8 @@ public class DoorTeleporter : MonoBehaviour
     private Vector2Int currentGridPosition;
     private bool isLocked = true;
 
-    private SpriteRenderer spriteRenderer; // Reference to door sprite
-    private Color lockedColor = Color.gray;
-    private Color unlockedColor = Color.white;
-
     private void Start()
     {
-        spriteRenderer = GetComponent<SpriteRenderer>();
         dungeonController = FindObjectOfType<DungeonController>();
         roomComponent = GetComponentInParent<RoomComponent>();
 
@@ -127,10 +120,17 @@ public class DoorTeleporter : MonoBehaviour
 
     private void UpdateDoorVisual()
     {
-        if (spriteRenderer != null)
+        //if (spriteRenderer != null)
+        //{
+        //    spriteRenderer.color = isLocked ? lockedColor : unlockedColor;
+        //    // You could also change the sprite or play an animation here
+        //}
+        if (isLocked)
         {
-            spriteRenderer.color = isLocked ? lockedColor : unlockedColor;
-            // You could also change the sprite or play an animation here
+            gameObject.SetActive(false);
+        }
+        else {
+            gameObject.SetActive(true);
         }
     }
 }
