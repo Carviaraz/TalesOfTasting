@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class Weapon : MonoBehaviour
@@ -17,7 +15,7 @@ public class Weapon : MonoBehaviour
 
     protected void PlayShootAnimation()
     {
-        //animator.SetTrigger("Shoot");
+        animator.SetTrigger("Attack");
     }
 
     public virtual void UseWeapon()

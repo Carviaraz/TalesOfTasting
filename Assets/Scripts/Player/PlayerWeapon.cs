@@ -34,7 +34,7 @@ public class PlayerWeapon : MonoBehaviour
         playerTransform = GetComponent<Transform>();
         // Create weapon at the orbit radius distance from pivot
         Vector3 spawnPosition = weaponPivot.position + new Vector3(orbitRadius, 0f, 0f);
-        currentWeapon = Instantiate(weaponPrefab, spawnPosition, Quaternion.identity, weaponPivot);
+        currentWeapon = Instantiate(weaponPrefab, spawnPosition, Quaternion.Euler(0, 0, -90), weaponPivot);
         weaponSprite = currentWeapon.GetComponentInChildren<SpriteRenderer>();
     }
 
