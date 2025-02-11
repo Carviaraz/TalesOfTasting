@@ -17,7 +17,7 @@ public class RangedWeapon : Weapon
         Quaternion spreadRotation = Quaternion.Euler(0, 0, randomSpread);
 
         // Set projectile direction based on weapon rotation + spread
-        projectile.Direction = spreadRotation * shootPos.right;  // Apply spread to weapon aim direction
+        projectile.Direction = spreadRotation * shootPos.up;  // Apply spread to weapon aim direction
 
         // Set the projectile's rotation to match its movement direction
         projectile.transform.rotation = Quaternion.LookRotation(Vector3.forward, projectile.Direction);
