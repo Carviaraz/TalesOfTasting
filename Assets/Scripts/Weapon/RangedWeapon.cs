@@ -6,7 +6,7 @@ public class RangedWeapon : Weapon
 
     public override void UseWeapon()
     {
-        PlayShootAnimation();
+        //PlayShootAnimation();
 
         // Create projectile
         Projectile projectile = Instantiate(ProjectilePrefab);
