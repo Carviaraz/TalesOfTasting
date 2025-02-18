@@ -34,6 +34,9 @@ public class RoomManager : MonoBehaviour
             //{
             //    MonitorEnemy(enemy);
             //}
+
+            // TODO Remove later
+            //roomComponent.UnlockAllDoors();
         }
         else
         {
