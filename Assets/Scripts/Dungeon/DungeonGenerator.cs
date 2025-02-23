@@ -1,9 +1,13 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.TextCore.Text;
 
 public class DungeonController : MonoBehaviour
 {
+    [Header("PlayerConfig")]
+    public PlayerConfig[] characters;
+
     [Header("Room Prefabs")]
     public GameObject startRoomPrefab;
     public GameObject bossRoomPrefab;
@@ -14,11 +18,10 @@ public class DungeonController : MonoBehaviour
     public GameObject prepareBossRoomPrefab;
 
     [Header("Dungeon Settings")]
-    public int dungeonWidth = 5;
-    public int dungeonHeight = 5;
-    public int minRooms = 6;
-    public int maxRooms = 10;
-    public Vector2 roomSize = new Vector2(12f, 12f); // Custom spacing between rooms
+    public int dungeonRadius = 2;
+    public int minRooms = 10;
+    public int maxRooms = 15;
+    public Vector2 roomSize = new Vector2(50f, 48f); // Custom spacing between rooms
 
     [Header("Room Type Limits")]
     [MinMax(0, 10)] public Vector2Int monsterRoomCount = new Vector2Int(2, 5);
@@ -41,6 +44,22 @@ public class DungeonController : MonoBehaviour
     private int currentItemRooms = 0;
     //private int treasureRoomCount = 0;
 
+    void Start()
+    {
+        GenerateDungeon();
+
+        // Spawn player
+        int selectedIndex = PlayerPrefs.GetInt("SelectedCharacterIndex", 0);
+        if (selectedIndex >= 0 && selectedIndex < characters.Length)
+        {
+            Instantiate(characters[selectedIndex].PlayerPrefab, Vector3.zero, Quaternion.identity);
+        }
+        else
+        {
+            Debug.LogError("Invalid character index!");
+        }
+    }
+
     [ContextMenu("Regenerate Dungeon")]
     public void RegenerateDungeon()
     {
@@ -54,19 +73,17 @@ public class DungeonController : MonoBehaviour
         {
             DestroyImmediate(transform.GetChild(0).gameObject);
         }
-
-        // Clear all data structures
         ClearDungeon();
-
-    }
-
-    void Start()
-    {
-        GenerateDungeon();
     }
 
     void GenerateDungeon()
     {
+        if (!ValidateDungeonConfiguration())
+        {
+            Debug.LogError("Invalid dungeon configuration! Generation aborted.");
+            return;
+        }
+
         bool validDungeon = false;
         while (!validDungeon)
         {
@@ -87,13 +104,13 @@ public class DungeonController : MonoBehaviour
 
     bool TryGenerateDungeon()
     {
-        // Step 1: Create Start Room
+        // Step 1: Create Start Room at center (0,0)
         Vector2Int startPosition = Vector2Int.zero;
         Room startRoom = CreateRoom(startPosition, RoomType.Start);
         dungeonGrid[startPosition] = startRoom;
         roomPositions.Add(startPosition);
 
-        // Step 2: Determine target room count (random between min and max)
+        // Step 2: Determine target room count
         int targetRoomCount = Random.Range(minRooms, maxRooms + 1);
 
         // Step 3: Generate Procedural Rooms
@@ -105,7 +122,7 @@ public class DungeonController : MonoBehaviour
             Vector2Int randomRoom = roomPositions[Random.Range(0, roomPositions.Count)];
             Vector2Int nextPosition = GetRandomAdjacentPosition(randomRoom);
 
-            if (!dungeonGrid.ContainsKey(nextPosition))
+            if (nextPosition != randomRoom && !dungeonGrid.ContainsKey(nextPosition))
             {
                 RoomType roomType = DetermineRoomType();
                 if (roomType == RoomType.Monster && currentMonsterRooms >= monsterRoomCount.y)
@@ -122,11 +139,10 @@ public class DungeonController : MonoBehaviour
             attempts++;
         }
 
-        // Check if we met minimum room requirements
         if (roomPositions.Count < minRooms)
             return false;
 
-        // Step 4: Ensure minimum room type requirements
+        // Step 4: Ensure minimum room requirements
         if (!EnsureMinimumRooms())
             return false;
 
@@ -143,14 +159,49 @@ public class DungeonController : MonoBehaviour
         return true;
     }
 
+    private bool IsWithinDungeonBounds(Vector2Int position)
+    {
+        return Mathf.Abs(position.x) <= dungeonRadius &&
+               Mathf.Abs(position.y) <= dungeonRadius;
+    }
+
+    private Vector2Int GetRandomAdjacentPosition(Vector2Int current)
+    {
+        Vector2Int[] directions = {
+            Vector2Int.up,
+            Vector2Int.down,
+            Vector2Int.left,
+            Vector2Int.right
+        };
+
+        // Shuffle directions for randomness
+        for (int i = directions.Length - 1; i > 0; i--)
+        {
+            int j = Random.Range(0, i + 1);
+            Vector2Int temp = directions[i];
+            directions[i] = directions[j];
+            directions[j] = temp;
+        }
+
+        foreach (Vector2Int dir in directions)
+        {
+            Vector2Int newPos = current + dir;
+            if (IsWithinDungeonBounds(newPos) && !dungeonGrid.ContainsKey(newPos))
+            {
+                return newPos;
+            }
+        }
+
+        return current; // Return current if no valid position found
+    }
 
     bool EnsureMinimumRooms()
     {
         // Check if we have space for minimum rooms
-        int remainingPositions = dungeonWidth * dungeonHeight - roomPositions.Count;
+        int totalGridSize = (dungeonRadius * 2 + 1) * (dungeonRadius * 2 + 1);
         int requiredRooms = monsterRoomCount.x + fireCampRoomCount.x + treasureRoomCount.x + itemRoomCount.x;
 
-        if (remainingPositions < requiredRooms)
+        if (totalGridSize - roomPositions.Count < requiredRooms)
             return false;
 
         // Ensure minimum monster rooms
@@ -220,143 +271,6 @@ public class DungeonController : MonoBehaviour
         }
     }
 
-    bool PlaceBossAndPrepareRooms()
-    {
-        // Find the farthest room from start
-        Vector2Int farthestPosition = FindFarthestPosition();
-        Debug.Log($"Farthest room position: {farthestPosition}");
-        Debug.Log($"Farthest room type: {dungeonGrid[farthestPosition].roomType}");
-
-        Vector2Int[] directions = {
-        Vector2Int.up,
-        Vector2Int.down,
-        Vector2Int.left,
-        Vector2Int.right
-    };
-
-        // Shuffle directions for randomness
-        for (int i = directions.Length - 1; i > 0; i--)
-        {
-            int j = Random.Range(0, i + 1);
-            Vector2Int temp = directions[i];
-            directions[i] = directions[j];
-            directions[j] = temp;
-        }
-
-        // Try each direction to place prepare room
-        Vector2Int preparePosition = Vector2Int.zero;
-        Vector2Int bossPosition = Vector2Int.zero;
-        bool foundValidPositions = false;
-
-        Debug.Log("Searching for valid positions...");
-        foreach (Vector2Int dir in directions)
-        {
-            preparePosition = farthestPosition + dir;
-            Debug.Log($"Trying prepare room at: {preparePosition}");
-
-            // Skip if prepare position is already occupied
-            if (dungeonGrid.ContainsKey(preparePosition))
-            {
-                Debug.Log($"Position {preparePosition} is already occupied by {dungeonGrid[preparePosition].roomType}");
-                continue;
-            }
-
-            // Try to find a position for boss room adjacent to prepare room
-            foreach (Vector2Int bossDir in directions)
-            {
-                bossPosition = preparePosition + bossDir;
-                Debug.Log($"Trying boss room at: {bossPosition}");
-
-                // Skip if boss position is already occupied or is the farthest room
-                if (dungeonGrid.ContainsKey(bossPosition) || bossPosition == farthestPosition)
-                {
-                    Debug.Log($"Boss position {bossPosition} is invalid");
-                    continue;
-                }
-
-                // We found valid positions for both rooms
-                foundValidPositions = true;
-                Debug.Log($"Found valid positions - Prepare: {preparePosition}, Boss: {bossPosition}");
-                break;
-            }
-
-            if (foundValidPositions)
-                break;
-        }
-
-        // If we couldn't find valid positions for both rooms, return false
-        if (!foundValidPositions)
-        {
-            Debug.LogWarning("Could not find valid positions for prepare and boss rooms!");
-            return false;
-        }
-
-        // Create and place prepare room
-        Debug.Log("Creating prepare room...");
-        Room prepareRoom = CreateRoom(preparePosition, RoomType.PrepareBoss);
-        dungeonGrid[preparePosition] = prepareRoom;
-        roomPositions.Add(preparePosition);
-        ConnectRooms(farthestPosition, preparePosition);
-
-        // Create and place boss room
-        Debug.Log("Creating boss room...");
-        Room bossRoom = CreateRoom(bossPosition, RoomType.Boss);
-        dungeonGrid[bossPosition] = bossRoom;
-        roomPositions.Add(bossPosition);
-        ConnectRooms(preparePosition, bossPosition);
-
-        // Verify room placement
-        Debug.Log("\nFinal Room Configuration:");
-        Debug.Log($"Farthest Room: Position={farthestPosition}, Type={dungeonGrid[farthestPosition].roomType}");
-        Debug.Log($"Prepare Room: Position={preparePosition}, Type={dungeonGrid[preparePosition].roomType}");
-        Debug.Log($"Boss Room: Position={bossPosition}, Type={dungeonGrid[bossPosition].roomType}");
-
-        // Add verification method
-        VerifyDungeonRooms();
-
-        return true;
-
-
-    }
-
-    // Add this new verification method
-    void VerifyDungeonRooms()
-    {
-        Debug.Log("\nVerifying all dungeon rooms:");
-
-        bool foundPrepareBoss = false;
-        bool foundBoss = false;
-        Vector2Int preparePos = Vector2Int.zero;
-        Vector2Int bossPos = Vector2Int.zero;
-
-        foreach (var kvp in dungeonGrid)
-        {
-            Debug.Log($"Position: {kvp.Key}, Room Type: {kvp.Value.roomType}");
-
-            if (kvp.Value.roomType == RoomType.PrepareBoss)
-            {
-                foundPrepareBoss = true;
-                preparePos = kvp.Key;
-            }
-            else if (kvp.Value.roomType == RoomType.Boss)
-            {
-                foundBoss = true;
-                bossPos = kvp.Key;
-            }
-        }
-
-        Debug.Log($"\nVerification Results:");
-        Debug.Log($"Found Prepare Boss Room: {foundPrepareBoss}");
-        Debug.Log($"Found Boss Room: {foundBoss}");
-
-        if (foundPrepareBoss && foundBoss)
-        {
-            bool areAdjacent = Vector2Int.Distance(preparePos, bossPos) == 1;
-            Debug.Log($"Prepare Room and Boss Room are adjacent: {areAdjacent}");
-        }
-    }
-
-
     Vector2Int FindFarthestPosition()
     {
         Vector2Int farthestPosition = Vector2Int.zero;
@@ -375,8 +289,9 @@ public class DungeonController : MonoBehaviour
         return farthestPosition;
     }
 
-    Vector2Int GetValidAdjacentPosition(Vector2Int current, Vector2Int exclude = default)
+    bool PlaceBossAndPrepareRooms()
     {
+        Vector2Int farthestPosition = FindFarthestPosition();
         Vector2Int[] directions = {
             Vector2Int.up,
             Vector2Int.down,
@@ -384,7 +299,7 @@ public class DungeonController : MonoBehaviour
             Vector2Int.right
         };
 
-        // Shuffle directions for randomness
+        // Shuffle directions
         for (int i = directions.Length - 1; i > 0; i--)
         {
             int j = Random.Range(0, i + 1);
@@ -393,29 +308,40 @@ public class DungeonController : MonoBehaviour
             directions[j] = temp;
         }
 
+        // Try to place prepare and boss rooms
         foreach (Vector2Int dir in directions)
         {
-            Vector2Int newPos = current + dir;
-            if (!dungeonGrid.ContainsKey(newPos) && newPos != exclude)
+            Vector2Int preparePosition = farthestPosition + dir;
+
+            if (!IsWithinDungeonBounds(preparePosition) || dungeonGrid.ContainsKey(preparePosition))
+                continue;
+
+            foreach (Vector2Int bossDir in directions)
             {
-                return newPos;
+                Vector2Int bossPosition = preparePosition + bossDir;
+
+                if (!IsWithinDungeonBounds(bossPosition) ||
+                    dungeonGrid.ContainsKey(bossPosition) ||
+                    bossPosition == farthestPosition)
+                    continue;
+
+                // Create prepare room
+                Room prepareRoom = CreateRoom(preparePosition, RoomType.PrepareBoss);
+                dungeonGrid[preparePosition] = prepareRoom;
+                roomPositions.Add(preparePosition);
+                ConnectRooms(farthestPosition, preparePosition);
+
+                // Create boss room
+                Room bossRoom = CreateRoom(bossPosition, RoomType.Boss);
+                dungeonGrid[bossPosition] = bossRoom;
+                roomPositions.Add(bossPosition);
+                ConnectRooms(preparePosition, bossPosition);
+
+                return true;
             }
         }
 
-        return Vector2Int.zero; // No valid position found
-    }
-
-
-    Vector2Int GetRandomAdjacentPosition(Vector2Int current)
-    {
-        Vector2Int[] directions = {
-            new Vector2Int(0, 1),  // Up
-            new Vector2Int(0, -1), // Down
-            new Vector2Int(-1, 0), // Left
-            new Vector2Int(1, 0)   // Right
-        };
-
-        return current + directions[Random.Range(0, directions.Length)];
+        return false;
     }
 
     Room CreateRoom(Vector2Int position, RoomType type)
@@ -453,7 +379,6 @@ public class DungeonController : MonoBehaviour
         List<RoomType> availableTypes = new List<RoomType>();
         Dictionary<RoomType, float> typeChances = new Dictionary<RoomType, float>();
 
-        // Add available room types based on their current counts and chances
         if (currentMonsterRooms < monsterRoomCount.y)
         {
             availableTypes.Add(RoomType.Monster);
@@ -475,18 +400,15 @@ public class DungeonController : MonoBehaviour
             typeChances[RoomType.Item] = itemRoomChance;
         }
 
-        // If no room types are available, return Monster
         if (availableTypes.Count == 0)
             return RoomType.Monster;
 
-        // Calculate total probability
         float totalChance = 0f;
         foreach (var type in availableTypes)
         {
             totalChance += typeChances[type];
         }
 
-        // Normalize probabilities if total is not 1
         if (totalChance != 1f)
         {
             foreach (var type in availableTypes)
@@ -495,7 +417,6 @@ public class DungeonController : MonoBehaviour
             }
         }
 
-        // Select room type based on probability
         float randomValue = Random.value;
         float currentTotal = 0f;
 
@@ -504,26 +425,11 @@ public class DungeonController : MonoBehaviour
             currentTotal += typeChances[type];
             if (randomValue <= currentTotal)
             {
-                switch (type)
-                {
-                    case RoomType.Monster:
-                        currentMonsterRooms++;
-                        break;
-                    case RoomType.FireCamp:
-                        currentFireCampRooms++;
-                        break;
-                    case RoomType.Treasure:
-                        currentTreasureRooms++;
-                        break;
-                    case RoomType.Item:
-                        currentItemRooms++;
-                        break;
-                }
+                UpdateRoomTypeCount(type, 1);
                 return type;
             }
         }
 
-        // Fallback to Monster room
         currentMonsterRooms++;
         return RoomType.Monster;
     }
@@ -556,19 +462,58 @@ public class DungeonController : MonoBehaviour
 
     void InstantiateRoom(Room room)
     {
-        Vector3 position = new Vector3(room.gridPosition.x * roomSize.x, room.gridPosition.y * roomSize.y, 0);
-        GameObject roomObject = Instantiate(room.prefab, position, Quaternion.identity, transform);
+        Vector3 position = new Vector3(
+            room.gridPosition.x * roomSize.x,
+            room.gridPosition.y * roomSize.y,
+            0
+        );
 
-        // Add room type to GameObject name for easier debugging
+        GameObject roomObject = Instantiate(room.prefab, position, Quaternion.identity, transform);
         roomObject.name = $"Room_{room.roomType}_{room.gridPosition}";
 
-        // Activate doors based on connectivity
         RoomComponent roomComponent = roomObject.GetComponent<RoomComponent>();
         if (roomComponent != null)
         {
             roomComponent.SetDoors(room.upDoor, room.downDoor, room.leftDoor, room.rightDoor);
             Debug.Log($"Instantiated {room.roomType} at {room.gridPosition} with doors: Up={room.upDoor}, Down={room.downDoor}, Left={room.leftDoor}, Right={room.rightDoor}");
         }
+    }
 
+    private bool ValidateDungeonConfiguration()
+    {
+        int totalGridSize = (dungeonRadius * 2 + 1) * (dungeonRadius * 2 + 1);
+        int minRequiredRooms = monsterRoomCount.x + fireCampRoomCount.x +
+                              treasureRoomCount.x + itemRoomCount.x +
+                              3; // +3 for start, prepare boss, and boss rooms
+
+        Debug.Log($"Grid Size: {dungeonRadius * 2 + 1}x{dungeonRadius * 2 + 1} = {totalGridSize} possible rooms");
+        Debug.Log($"Room Range: {minRooms}-{maxRooms} rooms");
+        Debug.Log($"Minimum Required Rooms: {minRequiredRooms}");
+
+        if (maxRooms > totalGridSize)
+        {
+            Debug.LogError($"Error: Maximum rooms ({maxRooms}) cannot exceed grid size ({totalGridSize})");
+            return false;
+        }
+
+        if (minRooms > maxRooms)
+        {
+            Debug.LogError($"Error: Minimum rooms ({minRooms}) cannot be greater than maximum rooms ({maxRooms})");
+            return false;
+        }
+
+        if (minRequiredRooms > maxRooms)
+        {
+            Debug.LogError($"Error: Total minimum required rooms ({minRequiredRooms}) exceeds maximum rooms ({maxRooms})");
+            return false;
+        }
+
+        if (minRooms < minRequiredRooms)
+        {
+            Debug.LogError($"Error: Minimum rooms ({minRooms}) is less than required minimum rooms ({minRequiredRooms})");
+            return false;
+        }
+
+        return true;
     }
 }

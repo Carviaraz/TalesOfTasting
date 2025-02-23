@@ -12,13 +12,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2bb0ab6198edad446b63b256b558f7a7, type: 3}
   m_Name: Config_Flam
   m_EditorClassIdentifier: 
-  Name: Iron Fist
+  Name: Flam
   Icon: {fileID: 21300000, guid: 842baed9d8ff9e444ad3d4b77f2d7c94, type: 3}
-  MaxHealth: 7
-  CurrentHealth: 7
-  MaxArrmor: 5
-  CurrentArrmor: 5
+  CharacterDescription: Flam is Flame
+  PlayerPrefab: {fileID: 4144786272609777399, guid: c3888fb575bef52408b0beb718f86763, type: 3}
+  MaxHealth: 15
+  CurrentHealth: 15
+  MaxArmor: 0
+  CurrentArmor: 0
   MaxEnergy: 150
-  CurrentEnergy: 0
+  CurrentEnergy: 150
   CritRate: 15
   CritDamage: 70
