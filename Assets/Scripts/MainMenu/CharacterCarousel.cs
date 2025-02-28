@@ -9,7 +9,7 @@ public class CharacterCarousel : MonoBehaviour
 {
     public List<PlayerConfig> characters; // List of ScriptableObjects
     public Image[] characterImages; // 3 UI Image elements for left, center, right
-    public TextMeshProUGUI nameText, descriptionText, MaxHealthText, MaxArrmorText;
+    public TextMeshProUGUI nameText, descriptionText, MaxHealthText, MaxArrmorText, MaxEnergyText;
     public Button leftButton, rightButton, selectButton;
     private int currentIndex = 0;
 
@@ -43,6 +43,7 @@ public class CharacterCarousel : MonoBehaviour
         descriptionText.text = characters[currentIndex].CharacterDescription;
         MaxHealthText.text = characters[currentIndex].MaxHealth.ToString();
         MaxArrmorText.text = characters[currentIndex].MaxArmor.ToString();
+        MaxEnergyText.text = characters[currentIndex].MaxEnergy.ToString();
 
         LeanTween.moveLocalX(characterImages[1].gameObject, 0, 0.3f).setEase(LeanTweenType.easeOutQuad);
     }

@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Name: Iron Fist
   Icon: {fileID: 21300000, guid: 02325a9dcfd507e4d8c42c28b24c1ab1, type: 3}
-  CharacterDescription: IronFist is Chinese J3K Xiami
+  CharacterDescription: IronFist who travel around the world to find the new Tasting
   PlayerPrefab: {fileID: 1562601555547080444, guid: 7d0cbf72ce0d6c046aa5bd69af5b1462, type: 3}
   MaxHealth: 10
   CurrentHealth: 10

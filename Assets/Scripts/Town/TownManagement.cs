@@ -5,7 +5,7 @@ using UnityEngine.SceneManagement;
 
 public class TownManagement : MonoBehaviour
 {
-    public PlayerConfig[] characters;
+    public CharacterList characterList;
     public Animator animator;
     public GameObject fadePanel;
 
@@ -18,9 +18,9 @@ public class TownManagement : MonoBehaviour
     private void Start()
     {
         int selectedIndex = PlayerPrefs.GetInt("SelectedCharacterIndex", 0);
-        if (selectedIndex >= 0 && selectedIndex < characters.Length)
+        if (selectedIndex >= 0 && selectedIndex < characterList.Characters.Length)
         {
-            Instantiate(characters[selectedIndex].PlayerPrefab, Vector3.zero, Quaternion.identity);
+            Instantiate(characterList.Characters[selectedIndex].PlayerPrefab, Vector3.zero, Quaternion.identity);
         }
         else
         {
