@@ -244,7 +244,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 74e895dfee3a3d543968c6b713298225, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  characterList: {fileID: 11400000, guid: cf6bc84f6e1bf614f8f8384d73a22789, type: 2}
   healthBar: {fileID: 303940244}
   healthText: {fileID: 598228125}
   armorBar: {fileID: 813376024}
@@ -1706,7 +1705,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1630583981
 RectTransform:
   m_ObjectHideFlags: 0

@@ -1,3 +1,4 @@
+using System;
 using TMPro;
 using UnityEngine;
 using UnityEngine.TextCore.Text;
@@ -5,9 +6,6 @@ using UnityEngine.UI;
 
 public class UIManager : MonoBehaviour
 {
-    [Header("Reference")]
-    [SerializeField] CharacterList characterList;
-
     [Header("Player UI")]
     [SerializeField] Image healthBar;
     [SerializeField] TextMeshProUGUI healthText;
@@ -16,27 +14,18 @@ public class UIManager : MonoBehaviour
     [SerializeField] Image energyBar;
     [SerializeField] TextMeshProUGUI energyText;
 
-    private PlayerConfig currentPlayer;
+    private GameManager gameManager;
 
-    void Start()
+    private void Awake()
     {
-        // Ensure character list is assigned
-        if (characterList == null || characterList.Characters.Length == 0)
-        {
-            Debug.LogError("CharacterList is missing or empty!");
-            return;
-        }
+        gameManager = GameManager.Instance;
 
-        // Get the selected character
-        int selectedIndex = PlayerPrefs.GetInt("SelectedCharacterIndex", 0);
-        if (selectedIndex < 0 || selectedIndex >= characterList.Characters.Length)
+        if (gameManager == null)
         {
-            Debug.LogError("Invalid character index, resetting to default.");
-            selectedIndex = 0;
+            Debug.LogError("GameManager instance is null! Ensure GameManager exists in the scene.");
         }
-
-        currentPlayer = characterList.Characters[selectedIndex];
     }
+
 
     void Update()
     {
@@ -46,7 +35,7 @@ public class UIManager : MonoBehaviour
     private void updatePlayerUI()
     {
         int selectedIndex = PlayerPrefs.GetInt("SelectedCharacterIndex", 0);
-        PlayerConfig playerConfig = characterList.Characters[selectedIndex];
+        PlayerConfig playerConfig = gameManager.currentPlayer;
 
         healthBar.fillAmount = Mathf.Lerp(
             healthBar.fillAmount,
