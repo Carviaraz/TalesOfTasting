@@ -1578,13 +1578,22 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 7ba2355f829fdf74d9a3d7016b3bfbe9, type: 2}
   - {fileID: 11400000, guid: d35d6d8b9a48c59469b575d25dea1b6d, type: 2}
   - {fileID: 11400000, guid: d35d6d8b9a48c59469b575d25dea1b6d, type: 2}
-  startRoomPrefab: {fileID: 7812687428304033660, guid: f740570720afa354dbf64850957c8688, type: 3}
-  bossRoomPrefab: {fileID: 7812687428304033660, guid: 7ee062082e429dc46b3445982701402a, type: 3}
-  monsterRoomPrefab: {fileID: 7812687428304033660, guid: 90cf258a043752a40bc72ba2cf4fd2b4, type: 3}
-  fireCampRoomPrefab: {fileID: 7812687428304033660, guid: f4f365026cb7abb43bacc874268d2832, type: 3}
-  treasureRoomPrefab: {fileID: 7812687428304033660, guid: f4f365026cb7abb43bacc874268d2832, type: 3}
-  itemRoomPrefab: {fileID: 7812687428304033660, guid: f4f365026cb7abb43bacc874268d2832, type: 3}
-  prepareBossRoomPrefab: {fileID: 7812687428304033660, guid: f4f365026cb7abb43bacc874268d2832, type: 3}
+  startRoomPrefabs:
+  - {fileID: 7812687428304033660, guid: f740570720afa354dbf64850957c8688, type: 3}
+  bossRoomPrefabs:
+  - {fileID: 7812687428304033660, guid: 7ee062082e429dc46b3445982701402a, type: 3}
+  monsterRoomPrefabs:
+  - {fileID: 7812687428304033660, guid: 90cf258a043752a40bc72ba2cf4fd2b4, type: 3}
+  - {fileID: 7812687428304033660, guid: 386f9c5663b735a439384991904dad41, type: 3}
+  - {fileID: 7812687428304033660, guid: c94410b4f61d83f42906f82f2d1cc05a, type: 3}
+  fireCampRoomPrefabs:
+  - {fileID: 7812687428304033660, guid: ccc690f52b7198c488bc25d5c80f9176, type: 3}
+  treasureRoomPrefabs:
+  - {fileID: 7812687428304033660, guid: f4f365026cb7abb43bacc874268d2832, type: 3}
+  itemRoomPrefabs:
+  - {fileID: 7812687428304033660, guid: f4f365026cb7abb43bacc874268d2832, type: 3}
+  prepareBossRoomPrefabs:
+  - {fileID: 7812687428304033660, guid: ccc690f52b7198c488bc25d5c80f9176, type: 3}
   dungeonRadius: 2
   minRooms: 10
   maxRooms: 15
@@ -1597,6 +1606,7 @@ MonoBehaviour:
   fireCampRoomChance: 0.1
   treasureRoomChance: 0.1
   itemRoomChance: 0.2
+  roomVariationChance: 0.3
 --- !u!4 &1422681542
 Transform:
   m_ObjectHideFlags: 0

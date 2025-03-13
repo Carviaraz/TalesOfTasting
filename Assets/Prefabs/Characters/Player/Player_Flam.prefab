@@ -72,7 +72,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: -1180966825
-  m_SortingLayer: 3
+  m_SortingLayer: 4
   m_SortingOrder: 0
   m_Sprite: {fileID: -1638208697, guid: 3ddbb73b9d9383741a2f11f987e04a73, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -410,7 +410,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 94128236f81cc16459504e84411466de, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  initialWeapon: {fileID: -6900449698890488447, guid: c1a9a31cdca14d740aaaecfd1bde6c73, type: 3}
+  initialWeapon: {fileID: 6416604634523535495, guid: 8d00b237ebff37c49a9684b4432fb8b5, type: 3}
   weaponPivot: {fileID: 3069007140325457867}
   orbitRadius: 1
 --- !u!114 &5821803625573876683

@@ -1,7 +1,5 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.TextCore.Text;
 
 public class DungeonController : MonoBehaviour
 {
@@ -9,13 +7,13 @@ public class DungeonController : MonoBehaviour
     public PlayerConfig[] characters;
 
     [Header("Room Prefabs")]
-    public GameObject startRoomPrefab;
-    public GameObject bossRoomPrefab;
-    public GameObject monsterRoomPrefab;
-    public GameObject fireCampRoomPrefab;
-    public GameObject treasureRoomPrefab;
-    public GameObject itemRoomPrefab;
-    public GameObject prepareBossRoomPrefab;
+    public List<GameObject> startRoomPrefabs = new List<GameObject>();
+    public List<GameObject> bossRoomPrefabs = new List<GameObject>();
+    public List<GameObject> monsterRoomPrefabs = new List<GameObject>();
+    public List<GameObject> fireCampRoomPrefabs = new List<GameObject>();
+    public List<GameObject> treasureRoomPrefabs = new List<GameObject>();
+    public List<GameObject> itemRoomPrefabs = new List<GameObject>();
+    public List<GameObject> prepareBossRoomPrefabs = new List<GameObject>();
 
     [Header("Dungeon Settings")]
     public int dungeonRadius = 2;
@@ -34,6 +32,9 @@ public class DungeonController : MonoBehaviour
     [Range(0f, 1f)] public float fireCampRoomChance = 0.1f;
     [Range(0f, 1f)] public float treasureRoomChance = 0.1f;
     [Range(0f, 1f)] public float itemRoomChance = 0.2f;
+
+    [Header("Variation Settings")]
+    [Range(0f, 1f)] public float roomVariationChance = 0.3f;
 
     public Dictionary<Vector2Int, Room> dungeonGrid = new Dictionary<Vector2Int, Room>();
     private List<Vector2Int> roomPositions = new List<Vector2Int>();
@@ -359,21 +360,6 @@ public class DungeonController : MonoBehaviour
         };
     }
 
-    GameObject GetPrefabForRoomType(RoomType type)
-    {
-        switch (type)
-        {
-            case RoomType.Start: return startRoomPrefab;
-            case RoomType.Boss: return bossRoomPrefab;
-            case RoomType.Monster: return monsterRoomPrefab;
-            case RoomType.FireCamp: return fireCampRoomPrefab;
-            case RoomType.Treasure: return treasureRoomPrefab;
-            case RoomType.Item: return itemRoomPrefab;
-            case RoomType.PrepareBoss: return prepareBossRoomPrefab;
-            default: return monsterRoomPrefab;
-        }
-    }
-
     RoomType DetermineRoomType()
     {
         List<RoomType> availableTypes = new List<RoomType>();
@@ -516,4 +502,45 @@ public class DungeonController : MonoBehaviour
 
         return true;
     }
+
+    GameObject GetRandomRoomPrefab(RoomType type)
+    {
+        List<GameObject> prefabList = GetPrefabListForRoomType(type);
+
+        // If no prefabs exist for this type, default to monster room
+        if (prefabList == null || prefabList.Count == 0)
+        {
+            Debug.LogWarning($"No prefabs found for room type {type}. Defaulting to monster room.");
+            prefabList = monsterRoomPrefabs;
+        }
+
+        // Randomly select a prefab, with a chance to use a different variant
+        if (Random.value < roomVariationChance && prefabList.Count > 1)
+        {
+            return prefabList[Random.Range(0, prefabList.Count)];
+        }
+
+        // If only one prefab or variation chance fails, return the first prefab
+        return prefabList[0];
+    }
+
+    List<GameObject> GetPrefabListForRoomType(RoomType type)
+    {
+        switch (type)
+        {
+            case RoomType.Start: return startRoomPrefabs;
+            case RoomType.Boss: return bossRoomPrefabs;
+            case RoomType.Monster: return monsterRoomPrefabs;
+            case RoomType.FireCamp: return fireCampRoomPrefabs;
+            case RoomType.Treasure: return treasureRoomPrefabs;
+            case RoomType.Item: return itemRoomPrefabs;
+            case RoomType.PrepareBoss: return prepareBossRoomPrefabs;
+            default: return monsterRoomPrefabs;
+        }
+    }
+    GameObject GetPrefabForRoomType(RoomType type)
+    {
+        return GetRandomRoomPrefab(type);
+    }
+
 }

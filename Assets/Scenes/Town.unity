@@ -8208,7 +8208,7 @@ GameObject:
   - component: {fileID: 704567759}
   - component: {fileID: 704567758}
   - component: {fileID: 704567760}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Building
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -10449,7 +10449,7 @@ MonoBehaviour:
   m_Intensity: 3
   m_LightVolumeIntensity: 1
   m_LightVolumeIntensityEnabled: 0
-  m_ApplyToSortingLayers: 00000000496a01393361182357e09bb9e3036fb5dbee7585
+  m_ApplyToSortingLayers: 00000000496a01393361182357e09bb9e3036fb5dbee7585397a4796c153fbed
   m_LightCookieSprite: {fileID: 0}
   m_DeprecatedPointLightCookieSprite: {fileID: 0}
   m_LightOrder: 0
@@ -10578,7 +10578,7 @@ MonoBehaviour:
   m_Intensity: 1
   m_LightVolumeIntensity: 1
   m_LightVolumeIntensityEnabled: 0
-  m_ApplyToSortingLayers: 00000000496a01393361182357e09bb9e3036fb5dbee7585
+  m_ApplyToSortingLayers: 00000000496a01393361182357e09bb9e3036fb5dbee7585397a4796c153fbed
   m_LightCookieSprite: {fileID: 0}
   m_DeprecatedPointLightCookieSprite: {fileID: 0}
   m_LightOrder: 0
