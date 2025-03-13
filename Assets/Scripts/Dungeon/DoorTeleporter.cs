@@ -40,7 +40,11 @@ public class DoorTeleporter : MonoBehaviour
             case RoomType.Item:
             case RoomType.Start:
             case RoomType.Treasure:
+            case RoomType.PrepareBoss:
                 return false;
+            case RoomType.Monster:
+            case RoomType.Boss:
+                return true;
             default:
                 return true;
         }
