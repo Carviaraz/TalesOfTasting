@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Name: Flam
   Icon: {fileID: 21300000, guid: 842baed9d8ff9e444ad3d4b77f2d7c94, type: 3}
-  CharacterDescription: Flam the living Flame
+  CharacterDescription: Flam the living Flame looking for the Hotter Tasting
   PlayerPrefab: {fileID: 4144786272609777399, guid: c3888fb575bef52408b0beb718f86763, type: 3}
   MaxHealth: 15
   CurrentHealth: 15

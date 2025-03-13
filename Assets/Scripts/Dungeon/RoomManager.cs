@@ -1,13 +1,40 @@
+using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class RoomManager : MonoBehaviour
 {
+    [System.Serializable]
+    public class MonsterSpawnConfig
+    {
+        public GameObject monsterPrefab;
+        [Range(0, 10)] public int minCount = 1;
+        [Range(0, 10)] public int maxCount = 3;
+        [Range(0f, 1f)] public float spawnChance = 0.5f;
+    }
+
+    [Header("Monster Spawning")]
+    public List<MonsterSpawnConfig> monsterSpawnConfigs = new List<MonsterSpawnConfig>();
+
+    [Header("Spawn Settings")]
+    [Range(0f, 10f)] public float spawnRadius = 5f;
+    [Range(0f, 2f)] public float spawnOffset = 1f;
+
     private RoomComponent roomComponent;
     private RoomType roomType;
+    private List<GameObject> spawnedMonsters = new List<GameObject>();
+    private bool isCleared = false;
+    private Vector2Int currentGridPosition;
+    private DungeonController dungeonController;
+
+    private DoorTeleporter[] doorTeleporters;
 
     private void Awake()
     {
         roomComponent = GetComponent<RoomComponent>();
+
+        // Find all door teleporters in the room
+        doorTeleporters = GetComponentsInChildren<DoorTeleporter>();
 
         // Get room type from parent dungeon controller
         Vector3 roomPosition = transform.position;
@@ -16,32 +43,124 @@ public class RoomManager : MonoBehaviour
             Mathf.RoundToInt(roomPosition.x / dungeonController.roomSize.x),
             Mathf.RoundToInt(roomPosition.y / dungeonController.roomSize.y)
         );
-
         if (dungeonController.dungeonGrid.ContainsKey(gridPosition))
         {
             roomType = dungeonController.dungeonGrid[gridPosition].roomType;
         }
 
-        // Find all enemies in the room if this is a combat room
+        // Spawn monsters if this is an enemy room
         if (IsEnemyRoom())
         {
-            //// Find enemies in all child objects
-            //Enemy[] roomEnemies = GetComponentsInChildren<Enemy>(true);
-            //enemies.AddRange(roomEnemies);
-
-            //// Subscribe to enemy death events
-            //foreach (var enemy in enemies)
-            //{
-            //    MonitorEnemy(enemy);
-            //}
-
-            // TODO Remove later
-            //roomComponent.UnlockAllDoors();
+            SpawnMonsters();
         }
         else
         {
-            // If it's not an enemy room, unlock doors immediately
-            roomComponent.UnlockAllDoors();
+            // If it's not an enemy room, unlock and activate doors immediately
+            Debug.Log("Door: Unlock because not monster room");
+            UnlockAndActivateDoors();
+        }
+    }
+
+    private void Update()
+    {
+        // Check if all monsters are defeated
+        if (IsEnemyRoom() && !isCleared)
+        {
+            CheckRoomClear();
+        }
+    }
+
+    private void SpawnMonsters()
+    {
+        // Clear any existing monsters (safety check)
+        spawnedMonsters.Clear();
+
+        // Randomly select monster spawn configurations
+        var availableConfigs = monsterSpawnConfigs
+            .Where(config => Random.value <= config.spawnChance)
+            .ToList();
+
+        //if (availableConfigs.Count == 0)
+        //{
+        //    Debug.LogWarning("No monster configurations available or all spawn chances failed.");
+        //    UnlockAndActivateDoors();
+        //    return;
+        //}
+
+        // Randomly determine total monster types
+        int totalMonsterTypes = Random.Range(1, availableConfigs.Count + 1);
+
+        for (int i = 0; i < totalMonsterTypes; i++)
+        {
+            var config = availableConfigs[Random.Range(0, availableConfigs.Count)];
+
+            // Randomly determine number of monsters for this type
+            int monsterCount = Random.Range(config.minCount, config.maxCount + 1);
+
+            for (int j = 0; j < monsterCount; j++)
+            {
+                Vector3 spawnPosition = GetRandomSpawnPosition();
+                GameObject monster = Instantiate(config.monsterPrefab, spawnPosition, Quaternion.identity, transform);
+                spawnedMonsters.Add(monster);
+
+                // Optional: Add health component listener or death event
+                var healthComponent = monster.GetComponent<EnemyHealth>();
+                if (healthComponent != null)
+                {
+                    healthComponent.OnDeath += HandleMonsterDeath;
+                }
+            }
+        }
+    }
+
+    private Vector3 GetRandomSpawnPosition()
+    {
+        Vector3 centerPosition = transform.position;
+        Vector2 randomCircle = Random.insideUnitCircle * spawnRadius;
+        return new Vector3(
+            centerPosition.x + randomCircle.x,
+            centerPosition.y + randomCircle.y + spawnOffset,
+            centerPosition.z
+        );
+    }
+
+    private void HandleMonsterDeath(GameObject deadMonster)
+    {
+        spawnedMonsters.Remove(deadMonster);
+    }
+
+    private void CheckRoomClear()
+    {
+        if (spawnedMonsters.Count == 0)
+        {
+            isCleared = true;
+            Debug.Log("Door: Unlock because The room is clear");
+            UnlockAndActivateDoors();
+            Debug.Log("Room cleared! Unlocking and activating doors.");
+        }
+    }
+
+    private void UnlockAndActivateDoors()
+    {
+        // Ensure door teleporters exist
+        if (doorTeleporters == null || doorTeleporters.Length == 0)
+        {
+            doorTeleporters = GetComponentsInChildren<DoorTeleporter>();
+        }
+
+        // Unlock each door
+        foreach (var doorTeleporter in doorTeleporters)
+        {
+            // Unlock the door (which will handle activation in UpdateDoorVisual)
+            doorTeleporter.UnlockDoor();
+        }
+
+        // Make sure to activate the RoomComponent doors as well
+        var roomComponent = GetComponent<RoomComponent>();
+        if (roomComponent != null)
+        {
+            // This will ensure the door GameObjects are active if they have connections
+            roomComponent.UpdateDoorsVisibility();
         }
     }
 
@@ -50,43 +169,4 @@ public class RoomManager : MonoBehaviour
         return roomType == RoomType.Monster ||
                roomType == RoomType.Boss;
     }
-
-    //private void MonitorEnemy(Enemy enemy)
-    //{
-    //    // Use a coroutine to check enemy existence every frame
-    //    StartCoroutine(CheckEnemyStatus(enemy));
-    //}
-
-    //private System.Collections.IEnumerator CheckEnemyStatus(Enemy enemy)
-    //{
-    //    while (enemy != null && enemy.CurrentHealth > 0)
-    //    {
-    //        yield return null;
-    //    }
-
-    //    // Enemy has been destroyed, remove it from the list
-    //    enemies.Remove(enemy);
-
-    //    // Check if all enemies are defeated
-    //    CheckRoomCompletion();
-    //}
-
-    //private void CheckRoomCompletion()
-    //{
-    //    if (enemies.Count == 0)
-    //    {
-    //        // All enemies defeated, unlock doors
-    //        roomComponent.UnlockAllDoors();
-    //    }
-    //}
-
-    //// Call this when new enemies spawn in the room
-    //public void AddEnemy(Enemy enemy)
-    //{
-    //    if (!enemies.Contains(enemy))
-    //    {
-    //        enemies.Add(enemy);
-    //        MonitorEnemy(enemy);
-    //    }
-    //}
 }

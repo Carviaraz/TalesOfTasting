@@ -52,8 +52,24 @@ public class RoomComponent : MonoBehaviour
             var teleporter = door.GetComponent<DoorTeleporter>();
             if (teleporter != null)
             {
-                teleporter.UnlockDoor();
+                //teleporter.UnlockDoor();
             }
         }
     }
+
+    public void UpdateDoorsVisibility()
+    {
+        // No need to modify the doors directly here - the DoorTeleporter component 
+        // will handle the activation based on its UnlockDoor and UpdateDoorVisual methods
+
+        // Just ensure the door parent objects are not completely inactive
+        if (upDoor != null) upDoor.SetActive(true);
+        if (downDoor != null) downDoor.SetActive(true);
+        if (leftDoor != null) leftDoor.SetActive(true);
+        if (rightDoor != null) rightDoor.SetActive(true);
+
+        // The DoorTeleporter components will then determine which ones 
+        // should actually be visible based on connections
+    }
+
 }
