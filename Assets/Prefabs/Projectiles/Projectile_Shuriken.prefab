@@ -161,9 +161,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 23ca3f37785f7f84bade9736384faf5c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 16
-  spin: 1
-  spinSpeed: -720
+  enemyProjectileSpeed: 0
+  attackPattern: 0
   targetLayer:
     serializedVersion: 2
-    m_Bits: 4294967295
+    m_Bits: 513
+  spinSpeed: -720
+  waveAmplitude: 0.5
+  waveFrequency: 2
+  returnDelay: 1
+  returnSpeed: 2
+  homingStrength: 2
+  homingDelay: 0.5
+  targetTag: Player
+  burstRadius: 0.5
+  burstTime: 2
+  spiralRadius: 1
+  spiralSpeed: 3

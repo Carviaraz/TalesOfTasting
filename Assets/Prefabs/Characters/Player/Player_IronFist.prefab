@@ -252,6 +252,7 @@ MonoBehaviour:
   initialWeapon: {fileID: 6416604634523535495, guid: 8d00b237ebff37c49a9684b4432fb8b5, type: 3}
   weaponPivot: {fileID: 2678916839719000869}
   orbitRadius: 1
+  currentWeapon: {fileID: 0}
 --- !u!114 &860579677788989191
 MonoBehaviour:
   m_ObjectHideFlags: 0

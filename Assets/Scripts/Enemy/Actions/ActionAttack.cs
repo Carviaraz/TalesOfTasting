@@ -2,40 +2,10 @@ using UnityEngine;
 
 public class ActionAttack : FSMAction
 {
-    //[Header("Config")]
-    //[SerializeField] private float timeBtwAttack;
-
-    //private EnemyAI enemy;
-    //// attack position
-    //private float attackTimer;
-
-    //private void Awake()
-    //{
-    //    enemy = GetComponent<EnemyAI>();
-    //}
-
-    //private void Start()
-    //{
-    //    attackTimer = timeBtwAttack;
-    //}
-
-    //public override void Act()
-    //{
-    //    if (enemy.Player == null) return;
-    //    attackTimer -= Time.deltaTime;
-
-    //    if (attackTimer < 0f)
-    //    {
-    //        //do attack
-    //        attackTimer = timeBtwAttack;
-    //    }
-    //}
-
     public enum AttackType { Melee, Ranged } // Attack types
     [Header("Config")]
     [SerializeField] private AttackType attackType;
     [SerializeField] private float timeBtwAttack = 1f;
-    //[SerializeField] private float damage = 1f;
 
     [Header("Melee Config")]
     [SerializeField] private float meleeAttackRange = 1.5f;

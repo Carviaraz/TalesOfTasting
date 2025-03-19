@@ -16,6 +16,7 @@ public class Weapon : MonoBehaviour
     protected void PlayShootAnimation()
     {
         animator.SetTrigger("Attack");
+        Debug.Log("Player Attack animation");
     }
 
     public virtual void UseWeapon()

@@ -3,18 +3,22 @@ using UnityEngine;
 public class PlayerWeapon : MonoBehaviour
 {
     [Header("Config")]
-    [SerializeField] private Weapon initialWeapon;
+    [SerializeField] public Weapon initialWeapon;
     [SerializeField] private Transform weaponPivot;  // Reference to the pivot GameObject
     [SerializeField] private float orbitRadius = 0.5f;  // Distance from player center
 
     private PlayerAction action;
-    private Weapon currentWeapon;
+    public Weapon currentWeapon;
     private SpriteRenderer weaponSprite;
     private Transform playerTransform;
+
+    private float lastFireTime = 0f;
+    private bool canFire = true;
 
     private void Awake()
     {
         action = new PlayerAction();
+        playerTransform = GetComponent<Transform>();
     }
 
     void Start()
@@ -30,11 +34,58 @@ public class PlayerWeapon : MonoBehaviour
 
     private void CreateWeapon(Weapon weaponPrefab)
     {
-        playerTransform = GetComponent<Transform>();
-        // Create weapon at the orbit radius distance from pivot
-        Vector3 spawnPosition = weaponPivot.position + new Vector3(orbitRadius, 0f, 0f);
-        currentWeapon = Instantiate(weaponPrefab, spawnPosition, Quaternion.Euler(0, 0, -90), weaponPivot);
+        // Reset pivot rotation to ensure consistent initial position
+        weaponPivot.localRotation = Quaternion.identity;
+
+        // Check if the weapon is melee or ranged
+        bool isMelee = weaponPrefab is MeleeWeapon;
+
+        // Create weapon with proper position
+        currentWeapon = Instantiate(weaponPrefab);
+
+        // Important: Set the parent first, then adjust the local position
+        currentWeapon.transform.SetParent(weaponPivot);
+
+        // Set local position based on weapon type
+        if (isMelee)
+        {
+            // Position melee weapon at pivot + 1 in x-axis
+            currentWeapon.transform.localPosition = new Vector3(1f, 0f, 0f);
+            currentWeapon.transform.localRotation = Quaternion.identity;
+        }
+        else
+        {
+            // Position ranged weapon at orbit radius
+            currentWeapon.transform.localPosition = new Vector3(orbitRadius, 0f, 0f);
+            currentWeapon.transform.localRotation = Quaternion.Euler(0, 0, -90);
+        }
+
         weaponSprite = currentWeapon.GetComponentInChildren<SpriteRenderer>();
+
+        // Immediately update weapon aim after creation
+        WeaponAim();
+    }
+
+    public void PickupWeapon(Weapon newWeaponPrefab)
+    {
+        // Destroy the current weapon
+        if (currentWeapon != null)
+        {
+            Destroy(currentWeapon.gameObject);
+        }
+
+        // If picking up an existing scene weapon
+        if (newWeaponPrefab != null)
+        {
+            //// Store the prefab reference
+            //Weapon weaponPrefab = newWeaponPrefab.GetComponent<Weapon>();
+
+            // Remove the scene instance
+            Destroy(newWeaponPrefab.gameObject);
+
+            // Create a new instance properly positioned
+            CreateWeapon(newWeaponPrefab);
+        }
     }
 
     private void ShootWeapon()
@@ -44,6 +95,7 @@ public class PlayerWeapon : MonoBehaviour
             return;
         }
 
+        // Use the weapon
         currentWeapon.UseWeapon();
     }
 
@@ -58,13 +110,35 @@ public class PlayerWeapon : MonoBehaviour
         // Calculate the angle in degrees
         float angle = Mathf.Atan2(aimDirection.y, aimDirection.x) * Mathf.Rad2Deg;
 
-        // Rotate the pivot instead of the weapon directly
+        // Check if it's a melee weapon
+        bool isMelee = currentWeapon is MeleeWeapon;
+
+        //// For melee weapons, we need to be careful with the rotation during attack
+        //MeleeWeapon meleeWeapon = currentWeapon as MeleeWeapon;
+        //if (meleeWeapon != null && meleeWeapon.IsAttacking())
+        //{
+        //    // Don't update rotation during attack animation
+        //    // This prevents the weapon from changing direction mid-swing
+        //}
+        //else
+        //{
+        //    // Rotate the pivot
+        //    weaponPivot.rotation = Quaternion.Euler(0f, 0f, angle);
+        //}
+
         weaponPivot.rotation = Quaternion.Euler(0f, 0f, angle);
 
         // Flip weapon sprite based on mouse position relative to player
         if (mouseWorldPos.x < playerTransform.position.x)
         {
-            weaponSprite.flipY = true;
+            if (isMelee)
+            {
+                weaponSprite.flipY = true;
+            }
+            else
+            {
+                weaponSprite.flipY = true;
+            }
         }
         else
         {

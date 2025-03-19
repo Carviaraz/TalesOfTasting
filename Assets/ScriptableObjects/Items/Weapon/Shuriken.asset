@@ -17,7 +17,8 @@ MonoBehaviour:
   WeaponType: 1
   Rarity: 0
   Damage: 1
+  Speed: 15
   RequiredEnergy: 1
-  FireRate: 0
+  FireRate: 5
   MinSpread: -20
   MaxSpread: 20

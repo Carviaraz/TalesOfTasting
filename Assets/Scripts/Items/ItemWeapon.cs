@@ -9,6 +9,7 @@ public class ItemWeapon : ItemData
 
     [Header("setting")]
     public float Damage;
+    public float Speed;
     public float RequiredEnergy;
     public float FireRate;
     public float MinSpread;
