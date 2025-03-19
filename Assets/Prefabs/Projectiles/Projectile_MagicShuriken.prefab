@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 207144970950623885}
   - component: {fileID: 8310328857561053742}
   m_Layer: 8
-  m_Name: Projectile_Buble
+  m_Name: Projectile_MagicShuriken
   m_TagString: Projectile
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -76,7 +76,7 @@ SpriteRenderer:
   m_SortingLayerID: -1251015709
   m_SortingLayer: 5
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: 787d94efb69bf0943b5b41d1e9a81d9c, type: 3}
+  m_Sprite: {fileID: 1503328154, guid: 24cc90a137b2bdd4eaf64b735f90cfce, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -161,20 +161,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 23ca3f37785f7f84bade9736384faf5c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enemyProjectileSpeed: 8
-  attackPattern: 1
+  speed: 16
+  spin: 1
+  spinSpeed: -720
   targetLayer:
     serializedVersion: 2
-    m_Bits: 640
-  spinSpeed: -720
-  waveAmplitude: 5
-  waveFrequency: 5
-  returnDelay: 1
-  returnSpeed: 2
-  homingStrength: 2
-  homingDelay: 0.5
-  targetTag: Player
-  burstRadius: 0.5
-  burstTime: 2
-  spiralRadius: 1
-  spiralSpeed: 3
+    m_Bits: 513

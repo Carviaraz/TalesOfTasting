@@ -284,7 +284,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1ad1522d3010f3c4492805956e84c239, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  rangeDetection: 10
+  rangeDetection: 12
   playerMask:
     serializedVersion: 2
     m_Bits: 128
@@ -319,7 +319,7 @@ MonoBehaviour:
   timeBtwAttack: 1
   meleeAttackRange: 1.5
   meleeDamage: 10
-  meleeHitboxPoint: {fileID: 0}
+  meleeHitboxPoint: {fileID: 5417980250351648270}
   playerLayer:
     serializedVersion: 2
     m_Bits: 128

@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 207144970950623885}
   - component: {fileID: 8310328857561053742}
   m_Layer: 8
-  m_Name: Projectile_Buble
+  m_Name: Projectile_Kunai
   m_TagString: Projectile
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -28,13 +28,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8827576344986091369}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0.7071068, w: 0.7071068}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 0.6, y: 0.6, z: 0.6}
   m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 90}
 --- !u!212 &4606346483855938843
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -76,7 +76,7 @@ SpriteRenderer:
   m_SortingLayerID: -1251015709
   m_SortingLayer: 5
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: 787d94efb69bf0943b5b41d1e9a81d9c, type: 3}
+  m_Sprite: {fileID: 21300000, guid: d89e45dba8328e04b96d72bf31dc011b, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -161,14 +161,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 23ca3f37785f7f84bade9736384faf5c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enemyProjectileSpeed: 8
-  attackPattern: 1
+  enemyProjectileSpeed: 0
+  attackPattern: 2
   targetLayer:
     serializedVersion: 2
-    m_Bits: 640
+    m_Bits: 513
   spinSpeed: -720
-  waveAmplitude: 5
-  waveFrequency: 5
+  waveAmplitude: 0.5
+  waveFrequency: 2
   returnDelay: 1
   returnSpeed: 2
   homingStrength: 2

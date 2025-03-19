@@ -71,7 +71,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: -1251015709
-  m_SortingLayer: 4
+  m_SortingLayer: 5
   m_SortingOrder: 0
   m_Sprite: {fileID: 21300000, guid: d54003fba1a66eb418cffa66f90d449d, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -96,7 +96,8 @@ GameObject:
   - component: {fileID: 8333964652606287594}
   - component: {fileID: 6120750330768343725}
   - component: {fileID: -6900449698890488447}
-  m_Layer: 0
+  - component: {fileID: -3017982962477599107}
+  m_Layer: 10
   m_Name: Stick
   m_TagString: Projectile
   m_Icon: {fileID: 0}
@@ -112,7 +113,7 @@ Transform:
   m_GameObject: {fileID: 7976142832213274677}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: -0.7071068, w: 0.7071068}
-  m_LocalPosition: {x: 0.2, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -199,3 +200,22 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   shootPos: {fileID: 7714601533617001873}
   itemWeapon: {fileID: 11400000, guid: ac84ed30be06937449d9a7a51a593dcc, type: 2}
+  attackDuration: 0.5
+  enemyLayer:
+    serializedVersion: 2
+    m_Bits: 1
+  hitBoxObject: {fileID: 7976142832213274677}
+--- !u!114 &-3017982962477599107
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7976142832213274677}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: de7ab5cb632b59c47b00c5ada94b39f5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  weaponPrefab: {fileID: -6900449698890488447}
+  interactionDistance: 2
