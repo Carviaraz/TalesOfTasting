@@ -249,7 +249,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 94128236f81cc16459504e84411466de, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  initialWeapon: {fileID: 6416604634523535495, guid: 8d00b237ebff37c49a9684b4432fb8b5, type: 3}
+  initialWeapon: {fileID: 6416604634523535495, guid: 7ba67c2e3aabb6a4eb8ad15eeed41e65, type: 3}
   weaponPivot: {fileID: 2678916839719000869}
   orbitRadius: 1
   currentWeapon: {fileID: 0}

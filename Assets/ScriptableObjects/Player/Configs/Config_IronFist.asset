@@ -17,10 +17,10 @@ MonoBehaviour:
   CharacterDescription: IronFist who travel around the world to find the new Tasting
   PlayerPrefab: {fileID: 1562601555547080444, guid: 7d0cbf72ce0d6c046aa5bd69af5b1462, type: 3}
   MaxHealth: 10
-  CurrentHealth: 10
+  CurrentHealth: 0
   MaxArmor: 10
-  CurrentArmor: 10
+  CurrentArmor: 0
   MaxEnergy: 100
-  CurrentEnergy: 100
+  CurrentEnergy: 86
   CritRate: 10
   CritDamage: 50

@@ -14064,12 +14064,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   monsterSpawnConfigs:
   - monsterPrefab: {fileID: 3846448782691852419, guid: 75ead683ff508cf46afc77af2c830794, type: 3}
-    minCount: 1
+    minCount: 2
     maxCount: 3
     spawnChance: 1
   - monsterPrefab: {fileID: 3846448782691852419, guid: 599b1dbc2dc8c2e42acdfc5648d87bfc, type: 3}
-    minCount: 1
-    maxCount: 2
+    minCount: 2
+    maxCount: 3
     spawnChance: 1
   spawnRadius: 5
   spawnOffset: 1
