@@ -16,13 +16,15 @@ GameObject:
   - component: {fileID: 8991442873022643264}
   - component: {fileID: 1013054069193032499}
   - component: {fileID: 4673052206677109022}
+  - component: {fileID: 8400891402708693836}
   - component: {fileID: 792089946129500656}
   - component: {fileID: 3174144858193554581}
   - component: {fileID: 2257771196311828031}
   - component: {fileID: 8299059558044987208}
   - component: {fileID: 7824608347730343404}
+  - component: {fileID: 1266046835817089427}
   m_Layer: 0
-  m_Name: Enemy_GreenOctopus
+  m_Name: Boss_Bamboo
   m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -84,7 +86,7 @@ SpriteRenderer:
   m_SortingLayerID: -1773700551
   m_SortingLayer: 3
   m_SortingOrder: 0
-  m_Sprite: {fileID: 2031938731, guid: ddad2e92b2d966a4e86db56a63fdade2, type: 3}
+  m_Sprite: {fileID: -521936976, guid: b176e65006e2d7944a07d04ac79255bc, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -128,8 +130,92 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c29cff538c195c249b69c6f2236de67b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Library: []
-  m_SpriteLibraryAsset: {fileID: 7108339969198208228, guid: 6cd01046e2b597e479892d80a180e934, type: 3}
+  m_Library:
+  - m_Name: walk_up
+    m_Hash: 0
+    m_CategoryList:
+    - m_Name: SpriteSheet_1
+      m_Hash: 0
+      m_Sprite: {fileID: -460038479, guid: b176e65006e2d7944a07d04ac79255bc, type: 3}
+    - m_Name: SpriteSheet_5
+      m_Hash: 0
+      m_Sprite: {fileID: -873214558, guid: b176e65006e2d7944a07d04ac79255bc, type: 3}
+    - m_Name: SpriteSheet_9
+      m_Hash: 0
+      m_Sprite: {fileID: 967731980, guid: b176e65006e2d7944a07d04ac79255bc, type: 3}
+    - m_Name: SpriteSheet_13
+      m_Hash: 0
+      m_Sprite: {fileID: -2006400461, guid: b176e65006e2d7944a07d04ac79255bc, type: 3}
+  - m_Name: walk_left
+    m_Hash: 0
+    m_CategoryList:
+    - m_Name: SpriteSheet_3
+      m_Hash: 0
+      m_Sprite: {fileID: -460038479, guid: b176e65006e2d7944a07d04ac79255bc, type: 3}
+    - m_Name: SpriteSheet_7
+      m_Hash: 0
+      m_Sprite: {fileID: -873214558, guid: b176e65006e2d7944a07d04ac79255bc, type: 3}
+    - m_Name: SpriteSheet_11
+      m_Hash: 0
+      m_Sprite: {fileID: 967731980, guid: b176e65006e2d7944a07d04ac79255bc, type: 3}
+    - m_Name: SpriteSheet_15
+      m_Hash: 0
+      m_Sprite: {fileID: -2006400461, guid: b176e65006e2d7944a07d04ac79255bc, type: 3}
+  - m_Name: walk_down
+    m_Hash: 0
+    m_CategoryList:
+    - m_Name: SpriteSheet_0
+      m_Hash: 0
+      m_Sprite: {fileID: -521936976, guid: b176e65006e2d7944a07d04ac79255bc, type: 3}
+    - m_Name: SpriteSheet_4
+      m_Hash: 0
+      m_Sprite: {fileID: 1785245988, guid: b176e65006e2d7944a07d04ac79255bc, type: 3}
+    - m_Name: SpriteSheet_8
+      m_Hash: 0
+      m_Sprite: {fileID: -574735351, guid: b176e65006e2d7944a07d04ac79255bc, type: 3}
+    - m_Name: SpriteSheet_12
+      m_Hash: 0
+      m_Sprite: {fileID: -893543558, guid: b176e65006e2d7944a07d04ac79255bc, type: 3}
+  - m_Name: walk_right
+    m_Hash: 0
+    m_CategoryList:
+    - m_Name: SpriteSheet_2
+      m_Hash: 0
+      m_Sprite: {fileID: -462286561, guid: b176e65006e2d7944a07d04ac79255bc, type: 3}
+    - m_Name: SpriteSheet_6
+      m_Hash: 0
+      m_Sprite: {fileID: -521936976, guid: b176e65006e2d7944a07d04ac79255bc, type: 3}
+    - m_Name: SpriteSheet_10
+      m_Hash: 0
+      m_Sprite: {fileID: -574735351, guid: b176e65006e2d7944a07d04ac79255bc, type: 3}
+    - m_Name: SpriteSheet_14
+      m_Hash: 0
+      m_Sprite: {fileID: -893543558, guid: b176e65006e2d7944a07d04ac79255bc, type: 3}
+  - m_Name: idle_up
+    m_Hash: 0
+    m_CategoryList:
+    - m_Name: SpriteSheet_1
+      m_Hash: 0
+      m_Sprite: {fileID: -910938273, guid: 29e64e2050b760e48b9cbb82d5e0ac16, type: 3}
+  - m_Name: idle_down
+    m_Hash: 0
+    m_CategoryList:
+    - m_Name: SpriteSheet_0
+      m_Hash: 0
+      m_Sprite: {fileID: -910938273, guid: 29e64e2050b760e48b9cbb82d5e0ac16, type: 3}
+  - m_Name: idle_left
+    m_Hash: 0
+    m_CategoryList:
+    - m_Name: SpriteSheet_3
+      m_Hash: 0
+      m_Sprite: {fileID: -910938273, guid: 29e64e2050b760e48b9cbb82d5e0ac16, type: 3}
+  - m_Name: idle_ight
+    m_Hash: 0
+    m_CategoryList:
+    - m_Name: SpriteSheet_2
+      m_Hash: 0
+      m_Sprite: {fileID: -910938273, guid: 29e64e2050b760e48b9cbb82d5e0ac16, type: 3}
+  m_SpriteLibraryAsset: {fileID: 7108339969198208228, guid: 932c9b5c728861145a36109ead085961, type: 3}
 --- !u!114 &3365316850436146055
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -178,9 +264,9 @@ CircleCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0}
+  m_Offset: {x: 0, y: -0.25}
   serializedVersion: 2
-  m_Radius: 0.7
+  m_Radius: 1.7
 --- !u!50 &1013054069193032499
 Rigidbody2D:
   serializedVersion: 4
@@ -220,7 +306,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a5366fffcd1420a46a2adc3c8375a062, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxHealth: 15
+  maxHealth: 100
+--- !u!114 &8400891402708693836
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3846448782691852419}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c5aa323de424dbe4283380e170d7e38d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &792089946129500656
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -246,7 +344,7 @@ MonoBehaviour:
   - StateID: Attack
     Actions:
     - {fileID: 2257771196311828031}
-    - {fileID: 7824608347730343404}
+    - {fileID: 1266046835817089427}
     Transitions:
     - Decision: {fileID: 8299059558044987208}
       TrueState: 
@@ -271,7 +369,7 @@ MonoBehaviour:
   obstacleMask:
     serializedVersion: 2
     m_Bits: 512
-  rangeDetection: 0.7
+  rangeDetection: 9.5
 --- !u!114 &2257771196311828031
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -284,7 +382,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1ad1522d3010f3c4492805956e84c239, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  rangeDetection: 12
+  rangeDetection: 20
   playerMask:
     serializedVersion: 2
     m_Bits: 128
@@ -319,9 +417,59 @@ MonoBehaviour:
   timeBtwAttack: 1
   meleeAttackRange: 1.5
   meleeDamage: 10
-  meleeHitboxPoint: {fileID: 5417980250351648270}
+  meleeHitboxPoint: {fileID: 0}
   playerLayer:
     serializedVersion: 2
     m_Bits: 128
-  projectilePrefab: {fileID: 8827576344986091369, guid: f794e0cedd9333c4ea0fa9d5b56a94b7, type: 3}
+  projectilePrefab: {fileID: 8827576344986091369, guid: dfb3cc7abe101684a9d1e5506ec88e6b, type: 3}
   attackPoint: {fileID: 5417980250351648270}
+--- !u!114 &1266046835817089427
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3846448782691852419}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 04ec1326120f4f747920a24f4c34ecfb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  attackType: 1
+  globalCooldown: 0.5
+  playerLayer:
+    serializedVersion: 2
+    m_Bits: 128
+  attackPoint: {fileID: 5417980250351648270}
+  bossHealth: {fileID: 4673052206677109022}
+  meleeAttackRange: 3
+  meleeDamage: 15
+  meleeHitboxPoint: {fileID: 5417980250351648270}
+  attackPatterns:
+  - patternName: Homing
+    projectilePrefab: {fileID: 8827576344986091369, guid: dfb3cc7abe101684a9d1e5506ec88e6b, type: 3}
+    cooldown: 0.3
+    minRange: 5.1
+    maxRange: 20
+    healthThreshold: 1
+    directions: []
+    currentCooldown: 0
+  - patternName: Arounf
+    projectilePrefab: {fileID: 8827576344986091369, guid: f794e0cedd9333c4ea0fa9d5b56a94b7, type: 3}
+    cooldown: 0.025
+    minRange: 0
+    maxRange: 8
+    healthThreshold: 1
+    directions:
+    - {x: 1, y: 0}
+    - {x: 0, y: 1}
+    - {x: -1, y: 0}
+    - {x: 0, y: -1}
+    - {x: 0.5, y: 0}
+    - {x: 0, y: 0.5}
+    - {x: -0.5, y: 0}
+    - {x: 0, y: -0.5}
+    currentCooldown: 0
+  specialAttackCooldown: 1
+  specialProjectilePrefab: {fileID: 8827576344986091369, guid: 93c6f80220e13d247a7f0c3ee8d72f66, type: 3}
+  specialAttackHealthThreshold: 0.3

@@ -1582,6 +1582,7 @@ MonoBehaviour:
   - {fileID: 7812687428304033660, guid: f740570720afa354dbf64850957c8688, type: 3}
   bossRoomPrefabs:
   - {fileID: 7812687428304033660, guid: 7ee062082e429dc46b3445982701402a, type: 3}
+  - {fileID: 7812687428304033660, guid: 6eaa86d95deda624c914c5d7b9185fc2, type: 3}
   monsterRoomPrefabs:
   - {fileID: 7812687428304033660, guid: 90cf258a043752a40bc72ba2cf4fd2b4, type: 3}
   - {fileID: 7812687428304033660, guid: 386f9c5663b735a439384991904dad41, type: 3}
@@ -1598,15 +1599,15 @@ MonoBehaviour:
   minRooms: 10
   maxRooms: 15
   roomSize: {x: 50, y: 48}
-  monsterRoomCount: {x: 2, y: 5}
+  monsterRoomCount: {x: 4, y: 5}
   fireCampRoomCount: {x: 1, y: 1}
   treasureRoomCount: {x: 1, y: 2}
   itemRoomCount: {x: 1, y: 3}
-  monsterRoomChance: 0.4
+  monsterRoomChance: 0.6
   fireCampRoomChance: 0.1
   treasureRoomChance: 0.1
   itemRoomChance: 0.2
-  roomVariationChance: 0.3
+  roomVariationChance: 0.5
 --- !u!4 &1422681542
 Transform:
   m_ObjectHideFlags: 0
