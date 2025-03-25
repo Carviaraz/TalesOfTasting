@@ -11,6 +11,7 @@ public class PlayerWeapon : MonoBehaviour
     public Weapon currentWeapon;
     private SpriteRenderer weaponSprite;
     private Transform playerTransform;
+    private bool isDisabled = false;
 
     private float lastFireTime = 0f;
     private bool canFire = true;
@@ -29,7 +30,10 @@ public class PlayerWeapon : MonoBehaviour
 
     void Update()
     {
-        WeaponAim();
+        if (!isDisabled)
+        {
+            WeaponAim();
+        }
     }
 
     private void CreateWeapon(Weapon weaponPrefab)
@@ -90,13 +94,10 @@ public class PlayerWeapon : MonoBehaviour
 
     private void ShootWeapon()
     {
-        if (currentWeapon == null)
+        if (!isDisabled && currentWeapon != null)
         {
-            return;
+            currentWeapon.UseWeapon();
         }
-
-        // Use the weapon
-        currentWeapon.UseWeapon();
     }
 
     private void WeaponAim()
@@ -154,5 +155,11 @@ public class PlayerWeapon : MonoBehaviour
     private void OnDisable()
     {
         action?.Disable();
+    }
+
+    public void DisableWeapon()
+    {
+        isDisabled = true;
+        action.Disable();  // Disable weapon input
     }
 }

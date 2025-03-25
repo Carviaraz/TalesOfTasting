@@ -14,6 +14,7 @@ public class PlayerMovement : MonoBehaviour
     private Rigidbody2D rb2d;
     private PlayerAction actions;
     private SpriteRenderer spriteRenderer;
+    private bool isDisabled = false;
 
     private Vector2 moveDirection;
     private float currentSpeed;
@@ -41,13 +42,19 @@ public class PlayerMovement : MonoBehaviour
 
     void Update()
     {
-        CaptureInput();
-        UpdateAnimation();
+        if (!isDisabled)
+        {
+            CaptureInput();
+            UpdateAnimation();
+        }
     }
 
     private void FixedUpdate()
     {
-        MovePlayer();
+        if (!isDisabled)
+        {
+            MovePlayer();
+        }
     }
 
     private void MovePlayer()
@@ -129,5 +136,12 @@ public class PlayerMovement : MonoBehaviour
     private void OnDisable()
     {
         actions.Disable();
+    }
+
+    public void DisableMovement()
+    {
+        isDisabled = true;
+        rb2d.velocity = Vector2.zero; // Stop movement immediately
+        actions.Disable(); // Disable input
     }
 }

@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class PlayerEnergy : MonoBehaviour
@@ -9,14 +7,14 @@ public class PlayerEnergy : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.F)) 
-        {
-            UseEnergy(1f);
-        }
-        if (Input.GetKeyDown(KeyCode.G))
-        {
-            RecoverEnergy(1f);
-        }
+        //if (Input.GetKeyDown(KeyCode.F)) 
+        //{
+        //    UseEnergy(1f);
+        //}
+        //if (Input.GetKeyDown(KeyCode.G))
+        //{
+        //    RecoverEnergy(1f);
+        //}
     }
 
     public void UseEnergy(float amount)
