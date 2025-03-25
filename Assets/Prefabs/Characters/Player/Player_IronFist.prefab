@@ -224,6 +224,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerConfig: {fileID: 11400000, guid: 7ba2355f829fdf74d9a3d7016b3bfbe9, type: 2}
+  gameOverPanel: {fileID: 6823240839257355514, guid: d4ae8a54a8e473543a2c9c39dac1fc1b, type: 3}
+  playerMovement: {fileID: 7657528664093303484}
+  playerWeapon: {fileID: 6331903369652126842}
 --- !u!114 &1881327792896505155
 MonoBehaviour:
   m_ObjectHideFlags: 0

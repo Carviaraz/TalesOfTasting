@@ -4,27 +4,39 @@ public class PlayerHealth : MonoBehaviour, ITakeDamage
 {
     [Header("Player")]
     [SerializeField] private PlayerConfig playerConfig;
+    [SerializeField] private PlayerMovement playerMovement;
+    [SerializeField] private PlayerWeapon playerWeapon;
 
-    //public void Update()
-    //{
-    //    if (Input.GetKeyDown(KeyCode.E))
-    //    {
-    //        TakeDamage(1f);
-    //    }
-    //    if (Input.GetKeyDown(KeyCode.R))
-    //    {
-    //        RecoverHealth(1f);
-    //    }
-    //}
+    private GameObject gameOverPanel;
 
-    //public void RecoverHealth(float amount)
-    //{
-    //    playerConfig.CurrentHealth += amount;
-    //    if (playerConfig.CurrentHealth > playerConfig.MaxHealth)
-    //    {
-    //        playerConfig.CurrentHealth = playerConfig.MaxHealth;
-    //    }
-    //}
+    private void Start()
+    {
+        playerConfig.InitializeStats();
+
+        gameOverPanel = GameObject.Find("GameOverPanel");
+        gameOverPanel.SetActive(false);
+    }
+
+    public void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.E))
+        {
+            TakeDamage(1f);
+        }
+        if (Input.GetKeyDown(KeyCode.R))
+        {
+            RecoverHealth(1f);
+        }
+    }
+
+    public void RecoverHealth(float amount)
+    {
+        playerConfig.CurrentHealth += amount;
+        if (playerConfig.CurrentHealth > playerConfig.MaxHealth)
+        {
+            playerConfig.CurrentHealth = playerConfig.MaxHealth;
+        }
+    }
 
     public void TakeDamage(float amount) 
     {
@@ -54,6 +66,21 @@ public class PlayerHealth : MonoBehaviour, ITakeDamage
 
     public void PlayerDead()
     {
-        //Destroy(gameObject);
+        Debug.Log("Player is ded");
+        gameOverPanel.SetActive(true); // Show Game Over Panel
+        DisablePlayerControls();
+    }
+
+    private void DisablePlayerControls()
+    {
+        GetComponent<PlayerMovement>().enabled = false; // Disable movement
+        GetComponent<PlayerWeapon>().enabled = false; // Disable weapon usage
+    }
+
+    public void ResetPlayerStats()
+    {
+        playerConfig.ResetStats(); // Reset stats to original values
+        GetComponent<PlayerMovement>().enabled = true; // Re-enable movement
+        GetComponent<PlayerWeapon>().enabled = true; // Re-enable weapon usage
     }
 }
