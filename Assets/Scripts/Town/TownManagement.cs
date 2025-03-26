@@ -27,6 +27,7 @@ public class TownManagement : MonoBehaviour
             Debug.LogError("Invalid character index!");
         }
 
+        AudioManager.Instance.PlayMusic(AudioManager.Instance.townMusic);
     }
 
     public IEnumerator WaitForFade(string tiggerName)

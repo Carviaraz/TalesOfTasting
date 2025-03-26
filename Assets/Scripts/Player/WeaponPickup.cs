@@ -5,7 +5,7 @@ using UnityEngine;
 public class WeaponPickup : MonoBehaviour
 {
     [SerializeField] private Weapon weaponPrefab;
-    [SerializeField] private float interactionDistance = 2f;
+    //[SerializeField] private float interactionDistance = 2f;
 
     private bool playerInRange = false;
     private PlayerWeapon playerWeapon;

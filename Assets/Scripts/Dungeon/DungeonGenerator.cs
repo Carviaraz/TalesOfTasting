@@ -59,6 +59,8 @@ public class DungeonController : MonoBehaviour
         {
             Debug.LogError("Invalid character index!");
         }
+
+        AudioManager.Instance.PlayMusic(AudioManager.Instance.dungeonMusic);
     }
 
     [ContextMenu("Regenerate Dungeon")]

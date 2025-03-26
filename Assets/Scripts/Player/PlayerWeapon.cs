@@ -13,8 +13,8 @@ public class PlayerWeapon : MonoBehaviour
     private Transform playerTransform;
     private bool isDisabled = false;
 
-    private float lastFireTime = 0f;
-    private bool canFire = true;
+    //private float lastFireTime = 0f;
+    //private bool canFire = true;
 
     private void Awake()
     {

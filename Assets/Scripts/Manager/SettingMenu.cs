@@ -67,13 +67,13 @@ public class SettingMenu : MonoBehaviour
     {
         int savedResolutionIndex = PlayerPrefs.GetInt("ResolutionIndex", resolutionDropdown.value);
         bool savedFullscreen = PlayerPrefs.GetInt("Fullscreen", 1) == 1;
-        float savedVolume = PlayerPrefs.GetFloat("Volume", 0.5f);
+        //float savedVolume = PlayerPrefs.GetFloat("Volume", 0.5f);
 
         resolutionDropdown.value = savedResolutionIndex;
         fullscreenToggle.isOn = savedFullscreen;
-        volumeSlider.value = savedVolume;
+        //volumeSlider.value = savedVolume;
 
-        audioMixer.SetFloat("Volume", savedVolume);
+        //audioMixer.SetFloat("Volume", savedVolume);
     }
 
     void SaveSettings(int resolutionIndex, bool isFullscreen)
