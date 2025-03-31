@@ -4772,8 +4772,8 @@ MonoBehaviour:
   m_ShadowVolumeIntensityEnabled: 0
   m_ShadowVolumeIntensity: 0.75
   m_LocalBounds:
-    m_Center: {x: 0.0012499988, y: 0.002700001, z: 0}
-    m_Extent: {x: 0.64755, y: 0.64199996, z: 0}
+    m_Center: {x: -0.00034999847, y: -0.004799992, z: 0}
+    m_Extent: {x: 0.64945, y: 0.6431, z: 0}
   m_PointLightInnerAngle: 360
   m_PointLightOuterAngle: 360
   m_PointLightInnerRadius: 0
@@ -14066,11 +14066,11 @@ MonoBehaviour:
   monsterSpawnConfigs:
   - monsterPrefab: {fileID: 3846448782691852419, guid: 75ead683ff508cf46afc77af2c830794, type: 3}
     minCount: 1
-    maxCount: 5
+    maxCount: 3
     spawnChance: 1
   - monsterPrefab: {fileID: 3846448782691852419, guid: 599b1dbc2dc8c2e42acdfc5648d87bfc, type: 3}
     minCount: 1
-    maxCount: 5
+    maxCount: 3
     spawnChance: 1
   spawnRadius: 5
   spawnOffset: 1

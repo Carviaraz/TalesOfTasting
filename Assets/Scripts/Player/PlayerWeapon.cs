@@ -4,8 +4,8 @@ public class PlayerWeapon : MonoBehaviour
 {
     [Header("Config")]
     [SerializeField] public Weapon initialWeapon;
-    [SerializeField] private Transform weaponPivot;  // Reference to the pivot GameObject
-    [SerializeField] private float orbitRadius = 0.5f;  // Distance from player center
+    [SerializeField] private Transform weaponPivot;
+    [SerializeField] private float orbitRadius = 0.5f;
 
     private PlayerAction action;
     public Weapon currentWeapon;
@@ -13,8 +13,9 @@ public class PlayerWeapon : MonoBehaviour
     private Transform playerTransform;
     private bool isDisabled = false;
 
-    //private float lastFireTime = 0f;
-    //private bool canFire = true;
+    // Fire rate control variables
+    private float lastFireTime = 0f;
+    private bool isHoldingFire = false;
 
     private void Awake()
     {
@@ -24,7 +25,9 @@ public class PlayerWeapon : MonoBehaviour
 
     void Start()
     {
-        action.Weapon.Shoot.performed += ctx => ShootWeapon();
+        action.Weapon.Shoot.started += ctx => StartFiring();
+        action.Weapon.Shoot.canceled += ctx => StopFiring();
+
         CreateWeapon(initialWeapon);
     }
 
@@ -33,7 +36,58 @@ public class PlayerWeapon : MonoBehaviour
         if (!isDisabled)
         {
             WeaponAim();
+
+            // Handle continuous firing if holding button
+            if (isHoldingFire)
+            {
+                TryToShoot();
+            }
         }
+    }
+
+    // New method to start firing
+    private void StartFiring()
+    {
+        if (!isDisabled && currentWeapon != null)
+        {
+            isHoldingFire = true;
+            // Try to shoot immediately, but respect fire rate
+            TryToShoot();
+        }
+    }
+
+    // New method to stop firing
+    private void StopFiring()
+    {
+        isHoldingFire = false;
+    }
+
+    // New method to attempt firing, respecting fire rate
+    private void TryToShoot()
+    {
+        // Get the current weapon's fire rate
+        float fireRate = GetCurrentFireRate();
+
+        // Calculate the time between shots based on fire rate
+        float fireInterval = 1f / fireRate;
+
+        // Check if enough time has passed since the last shot
+        if (Time.time >= lastFireTime + fireInterval)
+        {
+            ShootWeapon();
+        }
+    }
+
+    // Helper method to get the current weapon's fire rate
+    private float GetCurrentFireRate()
+    {
+        if (currentWeapon is RangedWeapon rangedWeapon)
+        {
+            return rangedWeapon.GetFireRate();
+        }
+
+        // Default fire rate for other weapons
+        return 1f; // 1 shot per second
     }
 
     private void CreateWeapon(Weapon weaponPrefab)
@@ -81,9 +135,6 @@ public class PlayerWeapon : MonoBehaviour
         // If picking up an existing scene weapon
         if (newWeaponPrefab != null)
         {
-            //// Store the prefab reference
-            //Weapon weaponPrefab = newWeaponPrefab.GetComponent<Weapon>();
-
             // Remove the scene instance
             Destroy(newWeaponPrefab.gameObject);
 
@@ -97,6 +148,7 @@ public class PlayerWeapon : MonoBehaviour
         if (!isDisabled && currentWeapon != null)
         {
             currentWeapon.UseWeapon();
+            lastFireTime = Time.time; // Update last fire time when weapon is used
         }
     }
 
@@ -113,19 +165,6 @@ public class PlayerWeapon : MonoBehaviour
 
         // Check if it's a melee weapon
         bool isMelee = currentWeapon is MeleeWeapon;
-
-        //// For melee weapons, we need to be careful with the rotation during attack
-        //MeleeWeapon meleeWeapon = currentWeapon as MeleeWeapon;
-        //if (meleeWeapon != null && meleeWeapon.IsAttacking())
-        //{
-        //    // Don't update rotation during attack animation
-        //    // This prevents the weapon from changing direction mid-swing
-        //}
-        //else
-        //{
-        //    // Rotate the pivot
-        //    weaponPivot.rotation = Quaternion.Euler(0f, 0f, angle);
-        //}
 
         weaponPivot.rotation = Quaternion.Euler(0f, 0f, angle);
 
@@ -161,5 +200,6 @@ public class PlayerWeapon : MonoBehaviour
     {
         isDisabled = true;
         action.Disable();  // Disable weapon input
+        isHoldingFire = false; // Stop any ongoing firing
     }
 }
