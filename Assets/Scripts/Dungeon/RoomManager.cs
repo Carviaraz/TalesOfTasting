@@ -10,7 +10,7 @@ public class RoomManager : MonoBehaviour
         public GameObject monsterPrefab;
         [Range(0, 10)] public int minCount = 1;
         [Range(0, 10)] public int maxCount = 3;
-        [Range(0f, 1f)] public float spawnChance = 0.5f;
+        //[Range(0f, 1f)] public float spawnChance = 1f;
     }
 
     [Header("Monster Spawning")]
@@ -72,29 +72,25 @@ public class RoomManager : MonoBehaviour
 
     private void SpawnMonsters()
     {
-        // Clear any existing monsters (safety check)
+        // Clear any existing monsters
         spawnedMonsters.Clear();
 
-        // Randomly select monster spawn configurations
-        var availableConfigs = monsterSpawnConfigs
-            .Where(config => Random.value <= config.spawnChance)
-            .ToList();
+        // Use all configurations without the spawn chance filter
+        var availableConfigs = new List<MonsterSpawnConfig>(monsterSpawnConfigs);
 
-        //if (availableConfigs.Count == 0)
-        //{
-        //    Debug.LogWarning("No monster configurations available or all spawn chances failed.");
-        //    UnlockAndActivateDoors();
-        //    return;
-        //}
-
-        // Randomly determine total monster types
+        // Randomly determine total monster types (up to the number of available configs)
         int totalMonsterTypes = Random.Range(1, availableConfigs.Count + 1);
 
         for (int i = 0; i < totalMonsterTypes; i++)
         {
-            var config = availableConfigs[Random.Range(0, availableConfigs.Count)];
+            // Get a random index from the remaining configs
+            int randomIndex = Random.Range(0, availableConfigs.Count);
+            var config = availableConfigs[randomIndex];
 
-            // Randomly determine number of monsters for this type
+            // Remove this config so it won't be selected again
+            availableConfigs.RemoveAt(randomIndex);
+
+            // Determine number of monsters for this type
             int monsterCount = Random.Range(config.minCount, config.maxCount + 1);
 
             for (int j = 0; j < monsterCount; j++)
@@ -103,7 +99,7 @@ public class RoomManager : MonoBehaviour
                 GameObject monster = Instantiate(config.monsterPrefab, spawnPosition, Quaternion.identity, transform);
                 spawnedMonsters.Add(monster);
 
-                // Optional: Add health component listener or death event
+                // Add health component listener
                 var healthComponent = monster.GetComponent<EnemyHealth>();
                 if (healthComponent != null)
                 {

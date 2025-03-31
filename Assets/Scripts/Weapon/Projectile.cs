@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class Projectile : MonoBehaviour
 {
-    public enum AttackPattern { Spin, Wave, Straight, Boomerang, Homing, Burst, Spiral }
+    public enum AttackPattern { Spin, Wave, Straight, Boomerang, Homing, Burst, Spiral, Shotgun, Ricochet }
 
     [Header("Config")]
     [SerializeField] private float enemyProjectileSpeed;
@@ -33,6 +33,17 @@ public class Projectile : MonoBehaviour
     [SerializeField] private float spiralRadius = 1f;
     [SerializeField] private float spiralSpeed = 3f;
 
+    [Header("Shotgun Parameters")]
+    [SerializeField] private int pelletCount = 5;
+    [SerializeField] private float spreadAngle = 30f;
+    [SerializeField] private GameObject pelletPrefab;
+
+    [Header("Ricochet Parameters")]
+    [SerializeField] private int maxBounces = 3;
+    [SerializeField] private float bounceSpeed = 1.2f;
+    [SerializeField] private float bounceDamageMultiplier = 0.8f;
+    [SerializeField] private LayerMask bounceLayer;
+
     public Vector3 Direction { get; set; }
     public float Damage { get; set; }
     public float Speed { get; set; }
@@ -44,6 +55,7 @@ public class Projectile : MonoBehaviour
     private Transform target;
     private Vector3 initialDirection;
     private bool isReturning = false;
+    private int bounceCount = 0;
 
     void Start()
     {
@@ -62,6 +74,55 @@ public class Projectile : MonoBehaviour
             if (targetObject != null)
             {
                 target = targetObject.transform;
+            }
+        }
+
+        // Handle shotgun pattern
+        if (attackPattern == AttackPattern.Shotgun)
+        {
+            FireShotgun();
+        }
+    }
+
+    private void FireShotgun()
+    {
+        if (pelletPrefab == null)
+        {
+            Debug.LogError("Shotgun pattern requires a pellet prefab!");
+            return;
+        }
+
+        // Calculate the angle spacing between pellets
+        float angleStep = spreadAngle / (pelletCount - 1);
+        float startAngle = -spreadAngle / 2;
+
+        // Fire pellets in a spread pattern
+        for (int i = 0; i < pelletCount; i++)
+        {
+            // Skip creating the center pellet as it's this object
+            if (i == pelletCount / 2 && pelletCount % 2 != 0)
+            {
+                continue;
+            }
+
+            float angle = startAngle + (angleStep * i);
+            Vector3 pelletDirection = Quaternion.Euler(0, 0, angle) * Direction;
+
+            GameObject pellet = Instantiate(pelletPrefab, transform.position, Quaternion.identity);
+            Projectile pelletComponent = pellet.GetComponent<Projectile>();
+
+            if (pelletComponent != null)
+            {
+                pelletComponent.Direction = pelletDirection.normalized;
+                pelletComponent.Damage = Damage * 0.5f; // Reduce damage for individual pellets
+                pelletComponent.Speed = Speed;
+
+                // Set the pellet's attack pattern to Straight
+                pelletComponent.attackPattern = AttackPattern.Straight;
+
+                // Rotate the pellet to face the direction
+                float pelletAngle = Mathf.Atan2(pelletDirection.y, pelletDirection.x) * Mathf.Rad2Deg - 90f;
+                pellet.transform.rotation = Quaternion.Euler(0, 0, pelletAngle);
             }
         }
     }
@@ -200,6 +261,16 @@ public class Projectile : MonoBehaviour
                 float spiralRotation = spiralAngle * Mathf.Rad2Deg;
                 transform.rotation = Quaternion.Euler(0, 0, spiralRotation);
                 break;
+
+            case AttackPattern.Shotgun:
+                // Main shotgun projectile moves straight
+                transform.position += Direction * (Speed * Time.deltaTime);
+                break;
+
+            case AttackPattern.Ricochet:
+                // Move in current direction
+                transform.position += Direction * (Speed * Time.deltaTime);
+                break;
         }
     }
 
@@ -213,6 +284,12 @@ public class Projectile : MonoBehaviour
                 return;
             }
 
+            // For ricochet pattern, don't destroy if it can still bounce
+            if (attackPattern == AttackPattern.Ricochet && bounceCount < maxBounces)
+            {
+                return;
+            }
+
             ITakeDamage damageable = collision.GetComponent<ITakeDamage>();
             if (damageable != null)
             {
@@ -221,6 +298,76 @@ public class Projectile : MonoBehaviour
 
             Destroy(gameObject);
             Debug.Log("Projectile hit " + collision.name + " for " + Damage + " Damage");
+        }
+        else if (attackPattern == AttackPattern.Ricochet &&
+                ((1 << collision.gameObject.layer) & bounceLayer) != 0 &&
+                bounceCount < maxBounces)
+        {
+            // Handle ricochet bounce
+            bounceCount++;
+
+            // Get the normal of the surface hit - use raycasting instead of contacts
+            RaycastHit2D hit = Physics2D.Raycast(transform.position, Direction, 1f, bounceLayer);
+            if (hit.collider != null)
+            {
+                // Calculate reflected direction
+                Direction = Vector2.Reflect(Direction, hit.normal);
+
+                // Rotate to face new direction
+                float bounceAngle = Mathf.Atan2(Direction.y, Direction.x) * Mathf.Rad2Deg - 90f;
+                transform.rotation = Quaternion.Euler(0, 0, bounceAngle);
+
+                // Increase speed with each bounce
+                Speed *= bounceSpeed;
+
+                // Reduce damage with each bounce
+                Damage *= bounceDamageMultiplier;
+
+                // Particle effect for bounce (optional)
+                // Instantiate(bounceEffect, hit.point, Quaternion.identity);
+            }
+        }
+    }
+
+    // Alternative approach for ricochet using OnCollisionEnter2D
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (attackPattern == AttackPattern.Ricochet &&
+            ((1 << collision.gameObject.layer) & bounceLayer) != 0 &&
+            bounceCount < maxBounces)
+        {
+            // Handle ricochet bounce
+            bounceCount++;
+
+            // Get the normal of the surface hit from the collision
+            Vector2 normal = collision.contacts[0].normal;
+
+            // Calculate reflected direction
+            Direction = Vector2.Reflect(Direction, normal);
+
+            // Rotate to face new direction
+            float bounceAngle = Mathf.Atan2(Direction.y, Direction.x) * Mathf.Rad2Deg - 90f;
+            transform.rotation = Quaternion.Euler(0, 0, bounceAngle);
+
+            // Increase speed with each bounce
+            Speed *= bounceSpeed;
+
+            // Reduce damage with each bounce
+            Damage *= bounceDamageMultiplier;
+
+            // Particle effect for bounce (optional)
+            // Instantiate(bounceEffect, collision.contacts[0].point, Quaternion.identity);
+        }
+        else if (((1 << collision.gameObject.layer) & targetLayer) != 0)
+        {
+            ITakeDamage damageable = collision.gameObject.GetComponent<ITakeDamage>();
+            if (damageable != null)
+            {
+                damageable.TakeDamage(Damage);
+            }
+
+            Destroy(gameObject);
+            Debug.Log("Projectile hit " + collision.gameObject.name + " for " + Damage + " Damage");
         }
     }
 
@@ -231,6 +378,21 @@ public class Projectile : MonoBehaviour
         {
             Gizmos.color = Color.red;
             Gizmos.DrawWireSphere(transform.position, burstRadius);
+        }
+        else if (attackPattern == AttackPattern.Shotgun)
+        {
+            Gizmos.color = Color.yellow;
+
+            // Draw lines representing the shotgun spread
+            float angleStep = spreadAngle / (pelletCount - 1);
+            float startAngle = -spreadAngle / 2;
+
+            for (int i = 0; i < pelletCount; i++)
+            {
+                float angle = startAngle + (angleStep * i);
+                Vector3 pelletDirection = Quaternion.Euler(0, 0, angle) * Vector3.up;
+                Gizmos.DrawRay(transform.position, pelletDirection * 2f);
+            }
         }
     }
 }

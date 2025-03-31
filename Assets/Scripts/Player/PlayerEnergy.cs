@@ -8,6 +8,17 @@ public class PlayerEnergy : MonoBehaviour
     [SerializeField] private float energyDrainRate = 1f;
     [SerializeField] private string dungeonSceneName = "Dungeon";
 
+    private PlayerHealth playerHealth;
+
+    private void Start()
+    {
+        playerHealth = GetComponent<PlayerHealth>();
+        if (playerHealth == null)
+        {
+            Debug.Log("PlayerHealth not found");
+        }
+    }
+
     private void OnEnable()
     {
         SceneManager.sceneLoaded += OnSceneLoaded;
@@ -56,6 +67,7 @@ public class PlayerEnergy : MonoBehaviour
         if (playerConfig.CurrentEnergy < 0)
         {
             playerConfig.CurrentEnergy = 0;
+            playerHealth.PlayerDead();
         }
     }
 
