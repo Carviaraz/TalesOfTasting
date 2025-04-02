@@ -3,12 +3,27 @@ using UnityEngine.SceneManagement;
 
 public class PlayerEnergy : MonoBehaviour
 {
+    public static PlayerEnergy Instance { get; private set; }
+
     [Header("Player")]
     [SerializeField] private PlayerConfig playerConfig;
     [SerializeField] private float energyDrainRate = 1f;
     [SerializeField] private string dungeonSceneName = "Dungeon";
 
     private PlayerHealth playerHealth;
+    private bool isDraining = false;
+
+    private void Awake()
+    {
+        if (Instance == null)
+        {
+            Instance = this;
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
+    }
 
     private void Start()
     {
@@ -51,7 +66,7 @@ public class PlayerEnergy : MonoBehaviour
         }
     }
 
-    private void StopEnergyDrain()
+    public void StopEnergyDrain()
     {
         CancelInvoke(nameof(DrainEnergy));
     }

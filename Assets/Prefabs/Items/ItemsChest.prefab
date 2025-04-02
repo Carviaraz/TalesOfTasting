@@ -145,9 +145,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   items:
-  - itemPrefab: {fileID: 661821741513482931, guid: 5a7d92bb22912f441bf0b47d67ca639a, type: 3}
-    minAmount: 1
-    maxAmount: 5
+  - itemPrefab: {fileID: 8230257149209199812, guid: 5938202158ea0034b9c406e0e7f7605b, type: 3}
+    minAmount: 0
+    maxAmount: 1
+  - itemPrefab: {fileID: 2836719605281071404, guid: 5a26339a936d9104ab5cd6b20b334795, type: 3}
+    minAmount: 0
+    maxAmount: 1
+  - itemPrefab: {fileID: 8932995873862665314, guid: 154baae8c904e6d448f4195aa47a5d60, type: 3}
+    minAmount: 0
+    maxAmount: 1
+  - itemPrefab: {fileID: 7669292834254680829, guid: 1d9da28516364d140bc7b5bfe2a14a57, type: 3}
+    minAmount: 0
+    maxAmount: 1
   hintText: {fileID: 5373881139866168567}
   spriteRenderer: {fileID: 933861979263104613}
   closedSprite: {fileID: -2041050567, guid: a803001b8a7f36a45a319fd69c145e2c, type: 3}
@@ -156,6 +165,7 @@ MonoBehaviour:
   fadeDuration: 0.5
   explosionRadius: 1.5
   explosionForce: 2
+  coinPrefab: {fileID: 661821741513482931, guid: 5a7d92bb22912f441bf0b47d67ca639a, type: 3}
 --- !u!1 &3088283931827317585
 GameObject:
   m_ObjectHideFlags: 0

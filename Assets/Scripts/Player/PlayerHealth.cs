@@ -7,26 +7,9 @@ public class PlayerHealth : MonoBehaviour, ITakeDamage
     [SerializeField] private PlayerMovement playerMovement;
     [SerializeField] private PlayerWeapon playerWeapon;
 
-    private GameObject gameOverPanel;
-
     private void Start()
     {
         playerConfig.InitializeStats();
-
-        gameOverPanel = GameObject.Find("GameOverPanel");
-        gameOverPanel.SetActive(false);
-    }
-
-    public void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.E))
-        {
-            TakeDamage(1f);
-        }
-        if (Input.GetKeyDown(KeyCode.R))
-        {
-            RecoverHealth(1f);
-        }
     }
 
     public void RecoverHealth(float amount)
@@ -38,14 +21,11 @@ public class PlayerHealth : MonoBehaviour, ITakeDamage
         }
     }
 
-    public void TakeDamage(float amount) 
+    public void TakeDamage(float amount)
     {
-        Debug.Log("Player got hit");
         if (playerConfig.CurrentArmor > 0)
         {
             float remainingDamage = amount - playerConfig.CurrentArmor;
-
-            // If the armor being negative it will be 0 instead
             playerConfig.CurrentArmor = Mathf.Max(playerConfig.CurrentArmor - amount, 0f);
 
             if (remainingDamage > 0)
@@ -53,7 +33,7 @@ public class PlayerHealth : MonoBehaviour, ITakeDamage
                 playerConfig.CurrentHealth = Mathf.Max(playerConfig.CurrentHealth - remainingDamage, 0f);
             }
         }
-        else 
+        else
         {
             playerConfig.CurrentHealth = Mathf.Max(playerConfig.CurrentHealth - amount, 0f);
         }
@@ -67,20 +47,29 @@ public class PlayerHealth : MonoBehaviour, ITakeDamage
     public void PlayerDead()
     {
         Debug.Log("Player is ded");
-        gameOverPanel.SetActive(true); // Show Game Over Panel
+
+        // Stop timer and energy drain when the player dies
+        DungeonTimer.Instance.StopTimer();
+        PlayerEnergy.Instance.StopEnergyDrain();
+
+        if (GameOverManager.Instance != null)
+        {
+            GameOverManager.Instance.ShowGameOverScreen(false);
+        }
+
         DisablePlayerControls();
     }
 
-    private void DisablePlayerControls()
+    public void DisablePlayerControls()
     {
-        GetComponent<PlayerMovement>().enabled = false; // Disable movement
-        GetComponent<PlayerWeapon>().enabled = false; // Disable weapon usage
+        GetComponent<PlayerMovement>().enabled = false;
+        GetComponent<PlayerWeapon>().enabled = false;
     }
 
     public void ResetPlayerStats()
     {
-        playerConfig.ResetStats(); // Reset stats to original values
-        GetComponent<PlayerMovement>().enabled = true; // Re-enable movement
-        GetComponent<PlayerWeapon>().enabled = true; // Re-enable weapon usage
+        playerConfig.ResetStats();
+        GetComponent<PlayerMovement>().enabled = true;
+        GetComponent<PlayerWeapon>().enabled = true;
     }
 }

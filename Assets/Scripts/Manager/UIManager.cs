@@ -11,6 +11,8 @@ public class UIManager : MonoBehaviour
     [SerializeField] TextMeshProUGUI armorText;
     [SerializeField] Image energyBar;
     [SerializeField] TextMeshProUGUI energyText;
+    [SerializeField] TextMeshProUGUI coinText;
+    [SerializeField] TextMeshProUGUI timerText;
 
     private GameManager gameManager;
 
@@ -54,5 +56,7 @@ public class UIManager : MonoBehaviour
         healthText.text = $"{playerConfig.CurrentHealth}/{playerConfig.MaxHealth}";
         armorText.text = $"{playerConfig.CurrentArmor}/{playerConfig.MaxArmor}";
         energyText.text = $"{playerConfig.CurrentEnergy}/{playerConfig.MaxEnergy}";
+        coinText.text = GameManager.Instance.coins.ToString();
+        timerText.text = DungeonTimer.Instance.FormatTime(DungeonTimer.Instance.GetElapsedTime());
     }
 }

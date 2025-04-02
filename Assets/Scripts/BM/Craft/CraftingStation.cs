@@ -2,28 +2,37 @@ using UnityEngine;
 
 public class CraftingStation : MonoBehaviour
 {
-    public GameObject craftCanvas; // ลาก UI คราฟจาก Inspector
-    private bool playerNearby = false;
-    private InventoryManager inventoryManager;
+    private static GameObject craftCanvas;  // Shared among all campfires
+    private static InventoryManager inventoryManager;
+
+    private bool playerNearby = false; // Tracks if player is near this campfire
+    private static bool isCraftingUIOpen = false; // Tracks if UI is open
+    private static Transform currentCampfire; // Stores the campfire currently using UI
 
     private void Start()
     {
-        // Get reference to the inventory manager
-        inventoryManager = FindAnyObjectByType<InventoryManager>();
+        // Only find the canvas once (for performance)
+        if (craftCanvas == null)
+        {
+            craftCanvas = GameObject.Find("CraftCanvas");
+            if (craftCanvas != null)
+                craftCanvas.SetActive(false); // Start hidden
+            else
+                Debug.LogWarning("⚠ CraftCanvas is missing from the scene!");
+        }
+
+        // Only find InventoryManager once
         if (inventoryManager == null)
         {
-            Debug.LogError("❌ InventoryManager not found in scene!");
+            inventoryManager = FindAnyObjectByType<InventoryManager>();
+            if (inventoryManager == null)
+                Debug.LogError("❌ InventoryManager not found in scene!");
         }
-        
-        if (craftCanvas != null)
-            craftCanvas.SetActive(false); // ปิด UI ตอนเริ่มเกม
-        else
-            Debug.LogWarning("⚠ craftCanvas ไม่ได้ถูกตั้งค่าใน Inspector!");
     }
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-        if (other.CompareTag("Player")) // ตรวจสอบว่าเป็น Player
+        if (other.CompareTag("Player"))
         {
             playerNearby = true;
         }
@@ -34,40 +43,55 @@ public class CraftingStation : MonoBehaviour
         if (other.CompareTag("Player"))
         {
             playerNearby = false;
-            CloseCraftingUI(); // ใช้ฟังก์ชันปิด UI แทน
+            if (currentCampfire == transform) // Only close if this campfire opened it
+            {
+                CloseCraftingUI();
+            }
         }
     }
 
-    void Update()
+    private void Update()
     {
-        if (playerNearby && Input.GetKeyDown(KeyCode.F)) // กด F เพื่อเปิด/ปิดคราฟ
+        if (playerNearby && Input.GetKeyDown(KeyCode.F))
         {
             ToggleCraftingUI();
         }
     }
 
-    void ToggleCraftingUI()
+    private void ToggleCraftingUI()
     {
         if (craftCanvas != null)
         {
-            bool newState = !craftCanvas.activeSelf;
-            craftCanvas.SetActive(newState);
-            
-            // เปิด/ปิด Inventory พร้อมกับ Crafting UI
-            if (inventoryManager != null && inventoryManager.inventoryUI != null)
+            if (!isCraftingUIOpen) // Open the UI
             {
-                inventoryManager.inventoryUI.SetActive(newState);
+                // Move canvas to this campfire
+                craftCanvas.transform.position = transform.position + new Vector3(0, 1.5f, 0); // Adjust position as needed
+                craftCanvas.SetActive(true);
+                isCraftingUIOpen = true;
+                currentCampfire = transform; // Remember which campfire is using the UI
+
+                // Open inventory UI
+                if (inventoryManager != null && inventoryManager.inventoryUI != null)
+                {
+                    inventoryManager.inventoryUI.SetActive(true);
+                }
+            }
+            else if (currentCampfire == transform) // Close only if this campfire opened it
+            {
+                CloseCraftingUI();
             }
         }
     }
-    
-    void CloseCraftingUI()
+
+    private void CloseCraftingUI()
     {
         if (craftCanvas != null)
         {
             craftCanvas.SetActive(false);
-            
-            // ปิด Inventory เมื่อปิด Crafting UI
+            isCraftingUIOpen = false;
+            currentCampfire = null;
+
+            // Close inventory UI
             if (inventoryManager != null && inventoryManager.inventoryUI != null)
             {
                 inventoryManager.inventoryUI.SetActive(false);

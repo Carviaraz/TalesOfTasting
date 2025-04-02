@@ -62,6 +62,7 @@ public class GameManager : MonoBehaviour
             coins -= amount;
             return true;
         }
+        else { coins = 0; }
         return false;
     }
 

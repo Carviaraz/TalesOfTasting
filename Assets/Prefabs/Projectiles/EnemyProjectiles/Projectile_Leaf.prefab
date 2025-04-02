@@ -172,9 +172,18 @@ MonoBehaviour:
   returnDelay: 1
   returnSpeed: 2
   homingStrength: 3
-  homingDelay: 0.2
+  homingDelay: 0.1
   targetTag: Player
   burstRadius: 0.5
   burstTime: 2
   spiralRadius: 1
   spiralSpeed: 3
+  pelletCount: 5
+  spreadAngle: 30
+  pelletPrefab: {fileID: 0}
+  maxBounces: 3
+  bounceSpeed: 1.2
+  bounceDamageMultiplier: 0.8
+  bounceLayer:
+    serializedVersion: 2
+    m_Bits: 0
