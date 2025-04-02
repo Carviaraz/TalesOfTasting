@@ -104,7 +104,7 @@ BoxCollider2D:
     m_Bits: 0
   m_ExcludeLayers:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 256
   m_LayerOverridePriority: 0
   m_ForceSendLayers:
     serializedVersion: 2
@@ -262,4 +262,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a16ef24fb35af8e40a3e3071e2b44dd4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  craftCanvas: {fileID: 0}
+  craftCanvasPrefab: {fileID: 1034436545045893941, guid: 236006af07b78db48bc7405e8fbfe3d0, type: 3}

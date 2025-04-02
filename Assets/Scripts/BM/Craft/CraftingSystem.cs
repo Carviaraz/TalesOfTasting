@@ -11,13 +11,13 @@ public class CraftingSystem : MonoBehaviour
     public Image resultImage;
     public Button cookButton;
     public ResultSlot resultSlot;
-    
+
     [Header("Recipes")]
     public List<Recipe> availableRecipes;
-    
+
     private Recipe currentRecipe;
-    private InventoryManager inventoryManager;  
-    
+    private InventoryManager inventoryManager;
+
     void Start()
     {
         inventoryManager = FindAnyObjectByType<InventoryManager>();
@@ -33,42 +33,41 @@ public class CraftingSystem : MonoBehaviour
         SetupCookButton();
     }
 
-    
     void OnEnable()
     {
-        SetupCookButton();
-        CheckRecipes();
+        ResetCraftingSystem();
     }
-    
-    private void ValidateRecipes()
+
+    // New method to reset the crafting system completely
+    public void ResetCraftingSystem()
     {
-        if (availableRecipes == null || availableRecipes.Count == 0)
+        // Clear all craft slots
+        foreach (CraftSlot slot in craftSlots)
         {
-            Debug.LogWarning("⚠️ No recipes available in the CraftingSystem");
-            return;
-        }
-        
-        foreach (Recipe recipe in availableRecipes)
-        {
-            if (recipe == null)
+            if (slot != null)
             {
-                Debug.LogError("❌ Null recipe found in availableRecipes list");
-                continue;
-            }
-            
-            if (recipe.result == null)
-            {
-                Debug.LogError($"❌ Recipe '{recipe.name}' has no result item");
-            }
-            
-            if (recipe.ingredients == null || recipe.ingredients.Count == 0)
-            {
-                Debug.LogError($"❌ Recipe '{recipe.name}' has no ingredients");
+                slot.ClearSlot();
             }
         }
+
+        // Reset UI elements
+        ClearResult();
+        SetupCookButton();
+
+        // Clear any existing dragged items
+        DraggedItemData.currentDraggedItem = null;
+        DraggedItemData.dropSuccessful = false;
+
+        // Make sure we check recipes after reset
+        CheckRecipes();
+
+        Debug.Log("🔄 Crafting system reset and ready");
     }
-    
-    private void SetupCookButton()
+
+    // Your existing methods continue here...
+
+    // Ensure SetupCookButton is public so it can be called from CraftingStation
+    public void SetupCookButton()
     {
         if (cookButton == null)
         {
@@ -80,7 +79,7 @@ public class CraftingSystem : MonoBehaviour
         cookButton.onClick.AddListener(OnCookButtonClicked);
         cookButton.interactable = false; // Disable by default
     }
-    
+
     public void CheckRecipes()
     {
         Debug.Log("🔍 Checking for matching recipes...");

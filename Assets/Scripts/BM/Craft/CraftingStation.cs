@@ -2,32 +2,56 @@ using UnityEngine;
 
 public class CraftingStation : MonoBehaviour
 {
-    private static GameObject craftCanvas;  // Shared among all campfires
-    private static InventoryManager inventoryManager;
+    [Header("References")]
+    [SerializeField] private GameObject craftCanvasPrefab; // Reference to canvas prefab instead of finding by name
 
-    private bool playerNearby = false; // Tracks if player is near this campfire
-    private static bool isCraftingUIOpen = false; // Tracks if UI is open
-    private static Transform currentCampfire; // Stores the campfire currently using UI
+    // Instance references
+    private GameObject craftCanvasInstance;
+    private InventoryManager inventoryManager;
+    private CraftingSystem craftingSystem;
 
-    private void Start()
+    // State tracking
+    private bool playerNearby = false;
+    private bool isCraftingUIOpen = false;
+
+    private void Awake()
     {
-        // Only find the canvas once (for performance)
-        if (craftCanvas == null)
-        {
-            craftCanvas = GameObject.Find("CraftCanvas");
-            if (craftCanvas != null)
-                craftCanvas.SetActive(false); // Start hidden
-            else
-                Debug.LogWarning("⚠ CraftCanvas is missing from the scene!");
-        }
-
-        // Only find InventoryManager once
+        // Find inventory manager reference
+        inventoryManager = FindAnyObjectByType<InventoryManager>();
         if (inventoryManager == null)
+            Debug.LogError("❌ InventoryManager not found in scene!");
+
+        // Instantiate craft canvas if it doesn't exist
+        if (craftCanvasPrefab != null)
         {
-            inventoryManager = FindAnyObjectByType<InventoryManager>();
-            if (inventoryManager == null)
-                Debug.LogError("❌ InventoryManager not found in scene!");
+            craftCanvasInstance = Instantiate(craftCanvasPrefab);
+            craftCanvasInstance.SetActive(false); // Start hidden
+
+            // Cache crafting system reference
+            craftingSystem = craftCanvasInstance.GetComponentInChildren<CraftingSystem>();
+            if (craftingSystem == null)
+                Debug.LogWarning("⚠ CraftingSystem component not found in CraftCanvas!");
         }
+        else
+        {
+            Debug.LogError("❌ CraftCanvasPrefab is not assigned!");
+        }
+    }
+
+    private void OnEnable()
+    {
+        // Ensure UI elements are correctly initialized when enabled
+        if (craftCanvasInstance != null)
+        {
+            // Make sure all UI handlers are properly registered
+            craftingSystem?.SetupCookButton();
+        }
+    }
+
+    private void OnDisable()
+    {
+        // Close UI when disabled
+        CloseCraftingUI();
     }
 
     private void OnTriggerEnter2D(Collider2D other)
@@ -43,10 +67,7 @@ public class CraftingStation : MonoBehaviour
         if (other.CompareTag("Player"))
         {
             playerNearby = false;
-            if (currentCampfire == transform) // Only close if this campfire opened it
-            {
-                CloseCraftingUI();
-            }
+            CloseCraftingUI();
         }
     }
 
@@ -60,15 +81,20 @@ public class CraftingStation : MonoBehaviour
 
     private void ToggleCraftingUI()
     {
-        if (craftCanvas != null)
+        if (craftCanvasInstance != null)
         {
             if (!isCraftingUIOpen) // Open the UI
             {
-                // Move canvas to this campfire
-                craftCanvas.transform.position = transform.position + new Vector3(0, 1.5f, 0); // Adjust position as needed
-                craftCanvas.SetActive(true);
+                // Position canvas near this crafting station
+                craftCanvasInstance.transform.position = transform.position + new Vector3(0, 1.5f, 0);
+                craftCanvasInstance.SetActive(true);
                 isCraftingUIOpen = true;
-                currentCampfire = transform; // Remember which campfire is using the UI
+
+                // Force reinitialize crafting system
+                if (craftingSystem != null)
+                {
+                    craftingSystem.ResetCraftingSystem();
+                }
 
                 // Open inventory UI
                 if (inventoryManager != null && inventoryManager.inventoryUI != null)
@@ -76,7 +102,7 @@ public class CraftingStation : MonoBehaviour
                     inventoryManager.inventoryUI.SetActive(true);
                 }
             }
-            else if (currentCampfire == transform) // Close only if this campfire opened it
+            else
             {
                 CloseCraftingUI();
             }
@@ -85,17 +111,25 @@ public class CraftingStation : MonoBehaviour
 
     private void CloseCraftingUI()
     {
-        if (craftCanvas != null)
+        if (craftCanvasInstance != null && isCraftingUIOpen)
         {
-            craftCanvas.SetActive(false);
+            craftCanvasInstance.SetActive(false);
             isCraftingUIOpen = false;
-            currentCampfire = null;
 
             // Close inventory UI
             if (inventoryManager != null && inventoryManager.inventoryUI != null)
             {
                 inventoryManager.inventoryUI.SetActive(false);
             }
+        }
+    }
+
+    // Clean up on destroy
+    private void OnDestroy()
+    {
+        if (craftCanvasInstance != null)
+        {
+            Destroy(craftCanvasInstance);
         }
     }
 }
