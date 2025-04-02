@@ -4,10 +4,10 @@ using TMPro;
 
 public class DialogueUI : MonoBehaviour
 {
-    public Image npcPortrait;   // รูปภาพของ NPC
-    public TextMeshProUGUI dialogueText;   // ข้อความบทสนทนา
-    public TextMeshProUGUI characterNameText;   // ชื่อตัวละคร
-    public GameObject dialogueBox;   // ตัวกล่องข้อความ
+    public Image npcPortrait;           // NPC portrait image.
+    public TextMeshProUGUI dialogueText;  // Dialogue text.
+    public TextMeshProUGUI characterNameText;  // NPC name text.
+    public GameObject dialogueBox;      // The dialogue panel.
 
     void Start()
     {
