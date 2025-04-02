@@ -16,5 +16,5 @@ MonoBehaviour:
   itemName: ChickenJerky
   icon: {fileID: 21300000, guid: 64ab12e2260f05640b720a6cb7430a4c, type: 3}
   isStackable: 1
-  healthRestore: 0
-  energyRestore: 0
+  healthRestore: 2
+  energyRestore: 25

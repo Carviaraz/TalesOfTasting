@@ -16,5 +16,5 @@ MonoBehaviour:
   itemName: RoastedChicken
   icon: {fileID: 21300000, guid: 87b0be14180e9be4681e14b64915d462, type: 3}
   isStackable: 1
-  healthRestore: 0
-  energyRestore: 0
+  healthRestore: 5
+  energyRestore: 35
