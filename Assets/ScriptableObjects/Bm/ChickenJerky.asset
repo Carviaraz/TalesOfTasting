@@ -10,8 +10,11 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 8a272f6884dc7eb44b4c756658dbaa75, type: 3}
-  m_Name: Eggplant
+  m_Name: ChickenJerky
   m_EditorClassIdentifier: 
-  itemName: Eggplant
-  icon: {fileID: 21300000, guid: b4c9f99162deca84ebc6c689c9df3de9, type: 3}
+  itemID: 0
+  itemName: ChickenJerky
+  icon: {fileID: 21300000, guid: 64ab12e2260f05640b720a6cb7430a4c, type: 3}
   isStackable: 1
+  healthRestore: 2
+  energyRestore: 25

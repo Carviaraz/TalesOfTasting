@@ -72,6 +72,28 @@ MonoBehaviour:
     - {fileID: 11400000, guid: ccd94d2cd43f1ea43a89d68d5613200a, type: 2}
     - {fileID: 11400000, guid: f419c17fbed784b4789aa673f84cb6ff, type: 2}
     result: {fileID: 11400000, guid: 5bbb30c5121d84f449bd4fd5b2b71527, type: 2}
+  - name: PumpkinPie
+    ingredients:
+    - {fileID: 11400000, guid: 9b80ee043eb8a04488d0b24366f66eaf, type: 2}
+    - {fileID: 11400000, guid: f419c17fbed784b4789aa673f84cb6ff, type: 2}
+    result: {fileID: 11400000, guid: d60124887e19bdb4bbd1b5f9f26acbe6, type: 2}
+  - name: ApplePumpkinTart
+    ingredients:
+    - {fileID: 11400000, guid: ccd94d2cd43f1ea43a89d68d5613200a, type: 2}
+    - {fileID: 11400000, guid: f419c17fbed784b4789aa673f84cb6ff, type: 2}
+    - {fileID: 11400000, guid: 9b80ee043eb8a04488d0b24366f66eaf, type: 2}
+    result: {fileID: 11400000, guid: a519ba1006804ab4f8f832572b224b43, type: 2}
+  - name: ChickenJerky
+    ingredients:
+    - {fileID: 11400000, guid: af204e042d909c34583fb9faf3b34ccc, type: 2}
+    - {fileID: 11400000, guid: ccd94d2cd43f1ea43a89d68d5613200a, type: 2}
+    result: {fileID: 11400000, guid: c14682080c080b64495535264d9de510, type: 2}
+  - name: ChickenJerky
+    ingredients:
+    - {fileID: 11400000, guid: af204e042d909c34583fb9faf3b34ccc, type: 2}
+    - {fileID: 11400000, guid: ccd94d2cd43f1ea43a89d68d5613200a, type: 2}
+    - {fileID: 11400000, guid: 9b80ee043eb8a04488d0b24366f66eaf, type: 2}
+    result: {fileID: 11400000, guid: 4f29a7ce534dcb8448aedb2b619a7d63, type: 2}
 --- !u!223 &7478963382280990917
 Canvas:
   m_ObjectHideFlags: 0

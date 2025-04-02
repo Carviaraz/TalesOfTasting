@@ -10,8 +10,11 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 8a272f6884dc7eb44b4c756658dbaa75, type: 3}
-  m_Name: Bacon
+  m_Name: ApplePumpkinTart
   m_EditorClassIdentifier: 
-  itemName: Bacon
-  icon: {fileID: 21300000, guid: 0b9e159b363a1ff4f8982693963e393d, type: 3}
+  itemID: 0
+  itemName: ApplePumpkinTart
+  icon: {fileID: 21300000, guid: 2ba14b7e3cc2e8942b9c3a3ed3238fd5, type: 3}
   isStackable: 1
+  healthRestore: 5
+  energyRestore: 30
