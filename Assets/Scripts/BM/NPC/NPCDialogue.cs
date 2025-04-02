@@ -3,44 +3,37 @@ using UnityEngine;
 public class NPCDialogue : MonoBehaviour
 {
     [TextArea(3, 5)]
-    public string[] messages;  // เก็บหลายบทสนทนา
-    public string characterName;  // ชื่อตัวละคร
-    public Sprite npcPortrait;  // รูปภาพของ NPC
+    public string[] messages;      // Array of dialogue messages.
+    public string characterName;   // NPC name.
+    public Sprite npcPortrait;     // NPC portrait.
 
     private bool isPlayerNearby = false;
     private bool isDialogueOpen = false;
-    private int currentMessageIndex = 0;  // ตำแหน่งบทสนทนา
-    public float closeDistance = 3.0f;  // ระยะห่างที่ข้อความจะปิด
-    public DialogueUI dialogueUI;
+    private int currentMessageIndex = 0;  // Which message is being shown.
+    public DialogueUI dialogueUI;         // Reference to the dialogue UI component.
     private Transform player;
 
     void Start()
     {
+        // Initially hide dialogue UI.
         HideMessage();
     }
 
     void Update()
     {
-        // ตรวจสอบระยะห่างระหว่าง NPC กับผู้เล่น
-        if (isDialogueOpen && player != null)
-        {
-            float distance = Vector3.Distance(transform.position, player.position);
-            if (distance > closeDistance)
-            {
-                HideMessage();
-            }
-        }
-
+        // When the player is nearby and F is pressed, advance dialogue.
         if (isPlayerNearby && Input.GetKeyDown(KeyCode.F))
         {
-            if (isDialogueOpen)
+            if (!isDialogueOpen)
             {
-                ShowNextMessage();
+                // Start dialogue at the beginning.
+                currentMessageIndex = 0;
+                ShowMessage();
             }
             else
             {
-                currentMessageIndex = 0;  // เริ่มต้นบทสนทนาใหม่
-                ShowMessage();
+                // Advance to the next message.
+                ShowNextMessage();
             }
         }
     }
@@ -51,6 +44,7 @@ public class NPCDialogue : MonoBehaviour
         {
             isPlayerNearby = true;
             player = other.transform;
+            // Optionally, show a "Press F to talk" prompt here.
         }
     }
 
@@ -59,6 +53,7 @@ public class NPCDialogue : MonoBehaviour
         if (other.CompareTag("Player"))
         {
             isPlayerNearby = false;
+            HideMessage();  // Close dialogue when player leaves.
         }
     }
 
@@ -77,7 +72,8 @@ public class NPCDialogue : MonoBehaviour
 
         if (currentMessageIndex >= messages.Length)
         {
-            HideMessage();  // ปิดข้อความถ้าบทสนทนาหมดแล้ว
+            // End dialogue if we've shown all messages.
+            HideMessage();
         }
         else
         {
