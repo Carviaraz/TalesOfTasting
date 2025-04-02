@@ -12,11 +12,9 @@ public class RangedWeapon : Weapon
     public override void UseWeapon()
     {
         //PlayShootAnimation();
-
         // Create projectile
         Projectile projectile = Instantiate(ProjectilePrefab);
         projectile.transform.position = shootPos.position;
-
         projectile.Damage = itemWeapon.Damage;
         projectile.Speed = itemWeapon.Speed;
 
@@ -26,10 +24,6 @@ public class RangedWeapon : Weapon
 
         // Set projectile direction based on weapon rotation + spread
         projectile.Direction = spreadRotation * shootPos.up;  // Apply spread to weapon aim direction
-
-        // Set the projectile's rotation to match its movement direction
-        //projectile.transform.rotation = Quaternion.LookRotation(Vector3.forward, projectile.Direction);
-
         float angle = Mathf.Atan2(projectile.Direction.y, projectile.Direction.x) * Mathf.Rad2Deg;
         projectile.transform.rotation = Quaternion.Euler(0, 0, angle);
     }

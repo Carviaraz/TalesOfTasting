@@ -224,7 +224,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerConfig: {fileID: 11400000, guid: 7ba2355f829fdf74d9a3d7016b3bfbe9, type: 2}
-  gameOverPanel: {fileID: 6823240839257355514, guid: d4ae8a54a8e473543a2c9c39dac1fc1b, type: 3}
   playerMovement: {fileID: 7657528664093303484}
   playerWeapon: {fileID: 6331903369652126842}
 --- !u!114 &1881327792896505155
@@ -240,6 +239,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerConfig: {fileID: 11400000, guid: 7ba2355f829fdf74d9a3d7016b3bfbe9, type: 2}
+  energyDrainRate: 1
+  dungeonSceneName: Dungeon
 --- !u!114 &6331903369652126842
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -252,7 +253,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 94128236f81cc16459504e84411466de, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  initialWeapon: {fileID: 6416604634523535495, guid: 7ba67c2e3aabb6a4eb8ad15eeed41e65, type: 3}
+  initialWeapon: {fileID: 6416604634523535495, guid: 8d00b237ebff37c49a9684b4432fb8b5, type: 3}
   weaponPivot: {fileID: 2678916839719000869}
   orbitRadius: 1
   currentWeapon: {fileID: 0}

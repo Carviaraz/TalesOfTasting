@@ -5,18 +5,28 @@ public class ItemsChest : TreasureChest
 {
     [SerializeField] private float explosionRadius = 1.5f;
     [SerializeField] private float explosionForce = 2.0f;
+    [SerializeField] private GameObject coinPrefab; // Ensure a reference to the coin prefab
 
     protected override IEnumerator OpenChest()
     {
         isOpened = true;
         if (hintText != null) hintText.gameObject.SetActive(false);
 
+        // Ensure coins always drop
+        SpawnCoins();
+
+        // Drop other random items (excluding coins)
         foreach (ChestItem chestItem in items)
         {
+            if (chestItem.itemPrefab == coinPrefab) continue; // Skip coins as they are handled separately
+
             int itemCount = chestItem.GetRandomAmount();
             for (int i = 0; i < itemCount; i++)
             {
-                SpawnItem(chestItem.itemPrefab);
+                if (Random.value > 0.5f) // 50% chance to spawn each item
+                {
+                    SpawnItem(chestItem.itemPrefab);
+                }
             }
         }
 
@@ -24,6 +34,17 @@ public class ItemsChest : TreasureChest
         StartCoroutine(ChangeSpriteFadeAndDestroy());
 
         yield return null;
+    }
+
+    private void SpawnCoins()
+    {
+        if (coinPrefab == null) return;
+
+        int coinAmount = Random.Range(2, 5); // Adjust range as needed
+        for (int i = 0; i < coinAmount; i++)
+        {
+            SpawnItem(coinPrefab);
+        }
     }
 
     private void SpawnItem(GameObject itemPrefab)
@@ -42,13 +63,11 @@ public class ItemsChest : TreasureChest
 
             Vector2 randomDirection = Random.insideUnitCircle.normalized;
             float randomDistance = Random.Range(explosionRadius * 0.5f, explosionRadius);
-            Vector2 targetPosition = (Vector2)transform.position + (randomDirection * randomDistance);
 
             rb.AddForce(randomDirection * explosionForce, ForceMode2D.Impulse);
         }
         else
         {
-            // If there's no Rigidbody2D, just move the item manually
             Vector2 randomDirection = Random.insideUnitCircle.normalized;
             float randomDistance = Random.Range(explosionRadius * 0.5f, explosionRadius);
             item.transform.position += (Vector3)(randomDirection * randomDistance);

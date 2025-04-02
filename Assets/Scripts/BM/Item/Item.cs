@@ -3,33 +3,45 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "New Item", menuName = "Inventory/Item")]
 public class Item : ScriptableObject
 {
-    public int itemID;  // เพิ่มตัวแปร ID
-    public string itemName;  // ชื่อไอเท็ม
-    public Sprite icon;  // รูปภาพไอเท็ม
-    public bool isStackable;  // ไอเท็มสามารถเก็บซ้อนกันได้หรือไม่
+    public int itemID;
+    public string itemName;
+    public Sprite icon;
+    public bool isStackable;
+
+    public float healthRestore;
+    public float energyRestore;
 
     public virtual void Use()
     {
-        Debug.Log($"🎮 กำลังใช้ไอเท็ม {itemName}");
-        // ✅ เพิ่มโค้ดเฉพาะไอเท็ม เช่น เพิ่ม HP, เพิ่มพลัง ฯลฯ
+        PlayerHealth playerHealth = GameObject.FindObjectOfType<PlayerHealth>();
+        PlayerEnergy playerEnergy = GameObject.FindObjectOfType<PlayerEnergy>();
+
+        if (playerHealth != null && healthRestore > 0)
+        {
+            playerHealth.RecoverHealth(healthRestore);
+            Debug.Log($"❤️ Restored {healthRestore} HP!");
+        }
+
+        if (playerEnergy != null && energyRestore > 0)
+        {
+            playerEnergy.RecoverEnergy(energyRestore);
+            Debug.Log($"⚡ Restored {energyRestore} Energy!");
+        }
+
     }
 
     public Item CloneOne()
-{
-    Item newItem = ScriptableObject.CreateInstance<Item>();
-    newItem.itemID = this.itemID;
-    newItem.itemName = this.itemName;
-    newItem.icon = this.icon;
-    newItem.isStackable = this.isStackable;
-    return newItem;
-}
+    {
+        Item newItem = ScriptableObject.CreateInstance<Item>();
+        newItem.itemID = this.itemID;
+        newItem.itemName = this.itemName;
+        newItem.icon = this.icon;
+        newItem.isStackable = this.isStackable;
+        return newItem;
+    }
 
-
-
-public bool IsSameItem(Item other)
-{
-    return other != null && itemID == other.itemID;
-}
-
-
+    public bool IsSameItem(Item other)
+    {
+        return other != null && itemID == other.itemID;
+    }
 }

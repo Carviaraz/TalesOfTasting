@@ -194,23 +194,28 @@ public class Projectile : MonoBehaviour
                 break;
 
             case AttackPattern.Homing:
-                if (target != null && timeSinceSpawn > homingDelay)
+                // Initial delay before homing starts
+                if (timeSinceSpawn > homingDelay && target != null)
                 {
                     // Calculate direction to target
                     Vector3 directionToTarget = (target.position - transform.position).normalized;
 
-                    // Gradually adjust direction towards target
+                    // Gradually steer towards the target
                     Direction = Vector3.Lerp(Direction, directionToTarget, homingStrength * Time.deltaTime);
-                    //Direction.z = 0;
                     Direction = Direction.normalized;
 
-                    // Rotate to face direction
-                    float homingAngle = Mathf.Atan2(Direction.y, Direction.x) * Mathf.Rad2Deg - 90f;
+                    // Move in the current direction
+                    transform.position += Direction * (Speed * Time.deltaTime);
+
+                    // Rotate to face movement direction
+                    float homingAngle = Mathf.Atan2(Direction.y, Direction.x) * Mathf.Rad2Deg -90f;
                     transform.rotation = Quaternion.Euler(0, 0, homingAngle);
                 }
-
-                // Move in current direction
-                transform.position += Direction * (Speed * Time.deltaTime);
+                else
+                {
+                    // Move straight before homing kicks in
+                    transform.position += Direction * (Speed * Time.deltaTime);
+                }
                 break;
 
             case AttackPattern.Burst:

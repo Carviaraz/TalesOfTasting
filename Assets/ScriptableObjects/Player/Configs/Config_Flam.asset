@@ -21,6 +21,6 @@ MonoBehaviour:
   MaxArmor: 0
   CurrentArmor: 0
   MaxEnergy: 150
-  CurrentEnergy: 150
+  CurrentEnergy: 134
   CritRate: 15
   CritDamage: 70
